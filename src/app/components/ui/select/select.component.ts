@@ -5,24 +5,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-select',
   imports: [CommonModule, FormsModule],
-  template: `
-    <div class="w-full">
-      @if (label()) {
-        <label [for]="id()" class="block text-sm font-medium text-gray-700 mb-1">
-          {{ label() }}
-        </label>
-      }
-      <select
-        [id]="id()"
-        [disabled]="disabled()"
-        [value]="value()"
-        (change)="onChange($event)"
-        [class]="getSelectClasses()"
-      >
-        <ng-content></ng-content>
-      </select>
-    </div>
-  `,
+  templateUrl: './select.component.html',
   styles: []
 })
 export class SelectComponent {

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { AlertComponent } from './components/ui/alert.component';
+import { AlertComponent } from './components/ui/alert/alert.component';
 
 @Component({
   selector: 'app-root',

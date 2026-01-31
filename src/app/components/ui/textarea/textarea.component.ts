@@ -5,24 +5,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-textarea',
   imports: [CommonModule, FormsModule],
-  template: `
-    <div class="w-full">
-      @if (label()) {
-        <label [for]="id()" class="block text-sm font-medium text-gray-700 mb-1">
-          {{ label() }}
-        </label>
-      }
-      <textarea
-        [id]="id()"
-        [placeholder]="placeholder()"
-        [disabled]="disabled()"
-        [rows]="rows()"
-        [value]="value()"
-        (input)="onInput($event)"
-        [class]="getTextareaClasses()"
-      ></textarea>
-    </div>
-  `,
+  templateUrl: './textarea.component.html',
   styles: []
 })
 export class TextareaComponent {

@@ -9,9 +9,9 @@ import { ExportService } from '../../services/export.service';
 import { DateUtilService } from '../../services/date-util.service';
 import { Person } from '../../models/person.model';
 import { Transaction, CreateTransactionDto } from '../../models/transaction.model';
-import { ButtonComponent } from '../ui/button.component';
-import { ModalComponent } from '../ui/modal.component';
-import { ConfirmDialogComponent } from '../ui/confirm-dialog.component';
+import { ButtonComponent } from '../ui/button/button.component';
+import { ModalComponent } from '../ui/modal/modal.component';
+import { ConfirmDialogComponent } from '../ui/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-transaction-view',

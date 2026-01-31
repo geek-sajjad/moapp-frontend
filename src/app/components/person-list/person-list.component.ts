@@ -8,9 +8,9 @@ import { AuthService } from '../../services/auth.service';
 import { AlertService } from '../../services/alert.service';
 import { ExportService } from '../../services/export.service';
 import { Person, CreatePersonDto } from '../../models/person.model';
-import { ButtonComponent } from '../ui/button.component';
-import { ModalComponent } from '../ui/modal.component';
-import { ConfirmDialogComponent } from '../ui/confirm-dialog.component';
+import { ButtonComponent } from '../ui/button/button.component';
+import { ModalComponent } from '../ui/modal/modal.component';
+import { ConfirmDialogComponent } from '../ui/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-person-list',
