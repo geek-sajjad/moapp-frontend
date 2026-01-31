@@ -1,0 +1,39 @@
+import { Component, input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'app-badge',
+  imports: [CommonModule],
+  template: `
+    <span [class]="getBadgeClasses()">
+      <ng-content></ng-content>
+    </span>
+  `,
+  styles: []
+})
+export class BadgeComponent {
+  variant = input<'default' | 'success' | 'error' | 'warning' | 'info' | 'outline'>('default');
+  size = input<'sm' | 'default' | 'lg'>('default');
+  className = input<string>('');
+
+  getBadgeClasses(): string {
+    const baseClasses = 'inline-flex items-center font-semibold rounded-full transition-colors';
+    
+    const variantClasses = {
+      default: 'bg-primary text-primary-foreground',
+      success: 'bg-green-100 text-green-800 border border-green-200',
+      error: 'bg-red-100 text-red-800 border border-red-200',
+      warning: 'bg-yellow-100 text-yellow-800 border border-yellow-200',
+      info: 'bg-blue-100 text-blue-800 border border-blue-200',
+      outline: 'border-2 border-input bg-background text-foreground'
+    };
+    
+    const sizeClasses = {
+      sm: 'px-2 py-0.5 text-xs',
+      default: 'px-3 py-1 text-sm',
+      lg: 'px-4 py-1.5 text-base'
+    };
+    
+    return `${baseClasses} ${variantClasses[this.variant()]} ${sizeClasses[this.size()]} ${this.className()}`;
+  }
+}

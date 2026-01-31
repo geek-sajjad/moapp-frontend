@@ -1,179 +1,315 @@
-<div class="min-h-screen bg-gray-50 p-5">
-  <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-6">
+<div class="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/10 p-4 md:p-6 lg:p-8">
+  <div class="max-w-4xl mx-auto space-y-6">
     <!-- Back Button -->
-    <app-button 
-      [variant]="'secondary'"
-      [fullWidth]="true"
-      (clicked)="goBack()"
-      class="mb-5"
-    >
-      بازگشت به لیست افراد
-    </app-button>
+    <div class="animate-in fade-in slide-in-from-top duration-300">
+      <app-button 
+        [variant]="'outline'"
+        [size]="'default'"
+        (clicked)="goBack()"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        بازگشت به لیست افراد
+      </app-button>
+    </div>
 
-    <!-- Person Info -->
+    <!-- Person Info Card -->
     @if (currentPerson(); as person) {
-      <div class="mb-4">
-        <h1 class="text-2xl font-bold text-center text-blue-700 mb-2">
-          تراکنش‌های {{ person.name }}
-        </h1>
-        
-        @if (person.phone || person.address) {
-          <div class="text-sm text-gray-600 mb-2">
-            @if (person.phone) {
-              <p><strong>شماره تلفن:</strong> {{ person.phone }}</p>
-            }
-            @if (person.address) {
-              <p><strong>آدرس:</strong> {{ person.address }}</p>
-            }
+      <div class="bg-card rounded-2xl shadow-xl border border-border overflow-hidden animate-in fade-in slide-in-from-top duration-300">
+        <div class="bg-gradient-to-r from-primary/10 to-secondary/10 px-6 py-5 border-b border-border">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+              <div class="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary">
+                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+              <div>
+                <h1 class="text-2xl md:text-3xl font-bold text-foreground">{{ person.name }}</h1>
+                @if (person.phone || person.address) {
+                  <div class="text-sm text-muted-foreground mt-2 space-y-1">
+                    @if (person.phone) {
+                      <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                        </svg>
+                        <span>{{ person.phone }}</span>
+                      </div>
+                    }
+                    @if (person.address) {
+                      <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+                          <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        <span>{{ person.address }}</span>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+            <app-button
+              [variant]="'outline'"
+              [size]="'sm'"
+              (clicked)="openEditPersonModal()"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+              </svg>
+              ویرایش مشخصات
+            </app-button>
           </div>
-        }
-        
-        <app-button
-          [variant]="'outline'"
-          [size]="'sm'"
-          (clicked)="openEditPersonModal()"
-          class="mt-2"
-        >
-          ویرایش مشخصات
-        </app-button>
+        </div>
+
+        <!-- Balance Display -->
+        <div class="px-6 py-5 bg-muted/20">
+          <div class="flex items-center justify-center gap-3">
+            <span class="text-muted-foreground font-medium">مانده حساب:</span>
+            <div 
+              [class]="'text-3xl font-bold ' + (balance() < 0 ? 'text-red-600' : balance() > 0 ? 'text-green-600' : 'text-muted-foreground')"
+            >
+              {{ formatNumber(balance()) }} تومان
+            </div>
+          </div>
+        </div>
       </div>
     }
 
-    <hr class="mb-6 border-gray-200">
-
-    <!-- Transaction Form -->
-    <h2 class="text-xl font-bold text-blue-700 mb-4">ثبت تراکنش</h2>
-    
-    <div class="space-y-4 mb-6">
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">تاریخ:</label>
-        <input
-          type="text"
-          [value]="transactionDate()"
-          (input)="transactionDate.set($any($event.target).value)"
-          placeholder="YYYY/MM/DD"
-          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
-        />
+    <!-- Transaction Form Card -->
+    <div class="bg-card rounded-2xl shadow-xl border border-border overflow-hidden animate-in fade-in slide-in-from-bottom duration-300">
+      <div class="bg-gradient-to-r from-primary/10 to-secondary/10 px-6 py-4 border-b border-border">
+        <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary">
+            <line x1="12" y1="1" x2="12" y2="23"></line>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+          </svg>
+          {{ isEditing() ? 'ویرایش تراکنش' : 'ثبت تراکنش جدید' }}
+        </h2>
       </div>
+      
+      <div class="p-6 space-y-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="space-y-2">
+            <label class="block text-sm font-semibold text-foreground">تاریخ</label>
+            <div class="relative">
+              <div class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+              </div>
+              <input
+                type="text"
+                [value]="transactionDate()"
+                (input)="transactionDate.set($any($event.target).value)"
+                placeholder="YYYY/MM/DD"
+                class="w-full h-11 pr-11 pl-3 py-2 border-2 border-input bg-background rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:border-ring/50 placeholder:text-muted-foreground"
+              />
+            </div>
+          </div>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">نوع تراکنش:</label>
-        <select
-          [value]="transactionType()"
-          (change)="transactionType.set($any($event.target).value)"
-          [class]="'w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 font-bold ' + getTransactionTypeClass()"
-        >
-          <option value="debit">بدهکار (شما بدهکار هستید)</option>
-          <option value="credit">بستانکار (شما بستانکار هستید)</option>
-        </select>
+          <div class="space-y-2">
+            <label class="block text-sm font-semibold text-foreground">نوع تراکنش</label>
+            <select
+              [value]="transactionType()"
+              (change)="transactionType.set($any($event.target).value)"
+              [class]="'w-full h-11 px-3 py-2 border-2 rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 font-bold ' + getTransactionTypeClass()"
+            >
+              <option value="debit">بدهکار (شما بدهکار هستید)</option>
+              <option value="credit">بستانکار (شما بستانکار هستید)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="block text-sm font-semibold text-foreground">مبلغ (تومان)</label>
+          <div class="relative">
+            <div class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="1" x2="12" y2="23"></line>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+              </svg>
+            </div>
+            <input
+              type="number"
+              [value]="transactionAmount()"
+              (input)="transactionAmount.set($any($event.target).value)"
+              placeholder="مبلغ را وارد کنید"
+              class="w-full h-11 pr-11 pl-3 py-2 border-2 border-input bg-background rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:border-ring/50 placeholder:text-muted-foreground"
+            />
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="block text-sm font-semibold text-foreground">توضیحات</label>
+          <textarea
+            [value]="transactionDescription()"
+            (input)="transactionDescription.set($any($event.target).value)"
+            rows="3"
+            placeholder="توضیحات تراکنش را وارد کنید"
+            class="w-full px-3 py-2 border-2 border-input bg-background rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:border-ring/50 placeholder:text-muted-foreground resize-none"
+          ></textarea>
+        </div>
+
+        <div class="flex gap-3 pt-2">
+          <app-button 
+            [fullWidth]="true"
+            [size]="'lg'"
+            (clicked)="saveTransaction()"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              @if (isEditing()) {
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                <polyline points="7 3 7 8 15 8"></polyline>
+              } @else {
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              }
+            </svg>
+            {{ isEditing() ? 'ذخیره تغییرات' : 'ثبت تراکنش' }}
+          </app-button>
+
+          @if (isEditing()) {
+            <app-button 
+              [variant]="'outline'"
+              [size]="'lg'"
+              (clicked)="clearTransactionForm()"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+              لغو
+            </app-button>
+          }
+        </div>
       </div>
-
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">مبلغ (تومان):</label>
-        <input
-          type="number"
-          [value]="transactionAmount()"
-          (input)="transactionAmount.set($any($event.target).value)"
-          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
-        />
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">توضیحات:</label>
-        <textarea
-          [value]="transactionDescription()"
-          (input)="transactionDescription.set($any($event.target).value)"
-          rows="3"
-          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
-        ></textarea>
-      </div>
-
-      <app-button 
-        [fullWidth]="true"
-        (clicked)="saveTransaction()"
-      >
-        {{ isEditing() ? 'ذخیره تغییرات' : 'ثبت تراکنش' }}
-      </app-button>
-
-      @if (isEditing()) {
-        <app-button 
-          [variant]="'secondary'"
-          [fullWidth]="true"
-          (clicked)="clearTransactionForm()"
-        >
-          لغو ویرایش
-        </app-button>
-      }
     </div>
-
-    <hr class="mb-6 border-gray-200">
 
     <!-- Transactions List -->
-    <h2 class="text-xl font-bold text-blue-700 mb-4">تراکنش‌ها</h2>
+    <div class="bg-card rounded-2xl shadow-xl border border-border overflow-hidden animate-in fade-in slide-in-from-bottom duration-500">
+      <div class="bg-gradient-to-r from-primary/10 to-secondary/10 px-6 py-4 border-b border-border">
+        <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+          تراکنش‌ها
+          @if (transactions().length > 0) {
+            <span class="text-sm font-normal text-muted-foreground">({{ transactions().length }} تراکنش)</span>
+          }
+        </h2>
+      </div>
 
-    <div class="space-y-2 mb-6">
-      @if (transactions().length === 0) {
-        <p class="text-center text-gray-500 py-8">هیچ تراکنشی ثبت نشده است.</p>
-      }
-
-      @for (transaction of transactions(); track transaction.id) {
-        <div class="flex items-start justify-between p-4 border-b border-gray-200 hover:bg-gray-50">
-          <div class="flex-grow">
-            <div class="text-xs text-gray-500">{{ transaction.date }}</div>
-            <div class="text-sm">{{ transaction.description }}</div>
+      <div class="divide-y divide-border">
+        @if (transactions().length === 0) {
+          <div class="p-12 text-center">
+            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-muted mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-muted-foreground">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+              </svg>
+            </div>
+            <p class="text-muted-foreground text-lg">هیچ تراکنشی ثبت نشده است.</p>
+            <p class="text-muted-foreground text-sm mt-2">تراکنش اول را ثبت کنید.</p>
           </div>
+        }
 
-          <div class="flex items-center gap-3 mr-4">
-            <div 
-              [class]="'text-lg font-bold whitespace-nowrap ' + (transaction.type === 'debit' ? 'text-red-600' : 'text-green-600')"
-            >
-              {{ transaction.type === 'debit' ? '-' : '+' }}{{ formatNumber(transaction.amount) }}
+        @for (transaction of transactions(); track transaction.id) {
+          <div class="flex flex-col md:flex-row md:items-center justify-between p-5 hover:bg-accent/50 transition-colors group">
+            <div class="flex-grow mb-3 md:mb-0">
+              <div class="flex items-center gap-3 mb-2">
+                <div [class]="'w-10 h-10 rounded-lg flex items-center justify-center ' + (transaction.type === 'debit' ? 'bg-red-50' : 'bg-green-50')">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" [class]="transaction.type === 'debit' ? 'text-red-600' : 'text-green-600'">
+                    @if (transaction.type === 'debit') {
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    } @else {
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    }
+                  </svg>
+                </div>
+                <div>
+                  <div class="text-sm text-muted-foreground flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                      <line x1="16" y1="2" x2="16" y2="6"></line>
+                      <line x1="8" y1="2" x2="8" y2="6"></line>
+                      <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    {{ transaction.date }}
+                  </div>
+                  <div class="text-foreground font-medium mt-1">{{ transaction.description }}</div>
+                </div>
+              </div>
             </div>
 
-            <div class="flex gap-1">
-              <app-button
-                [variant]="'outline'"
-                [size]="'sm'"
-                (clicked)="editTransaction(transaction)"
-                title="ویرایش"
+            <div class="flex items-center gap-3">
+              <div 
+                [class]="'text-2xl font-bold whitespace-nowrap px-4 py-2 rounded-lg ' + (transaction.type === 'debit' ? 'text-red-600 bg-red-50' : 'text-green-600 bg-green-50')"
               >
-                ویرایش
-              </app-button>
-              <app-button
-                [variant]="'destructive'"
-                [size]="'sm'"
-                (clicked)="confirmDeleteTransaction(transaction.id)"
-                title="حذف"
-              >
-                حذف
-              </app-button>
+                {{ transaction.type === 'debit' ? '-' : '+' }}{{ formatNumber(transaction.amount) }}
+              </div>
+
+              <div class="flex gap-2">
+                <app-button
+                  [variant]="'outline'"
+                  [size]="'sm'"
+                  (clicked)="editTransaction(transaction)"
+                  title="ویرایش"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                  </svg>
+                </app-button>
+                <app-button
+                  [variant]="'destructive'"
+                  [size]="'sm'"
+                  (clicked)="confirmDeleteTransaction(transaction.id)"
+                  title="حذف"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  </svg>
+                </app-button>
+              </div>
             </div>
           </div>
-        </div>
-      }
-    </div>
-
-    <!-- Balance -->
-    <div class="border-t border-gray-300 pt-4">
-      <div class="text-center">
-        <span class="text-sm text-gray-600">مانده حساب:</span>
-        <div 
-          [class]="'text-2xl font-bold mt-2 ' + (balance() < 0 ? 'text-red-600' : 'text-green-600')"
-        >
-          {{ formatNumber(balance()) }} تومان
-        </div>
+        }
       </div>
     </div>
 
     <!-- Share Button -->
-    <app-button
-      [variant]="'default'"
-      [fullWidth]="true"
-      (clicked)="shareStatement()"
-      class="mt-6 bg-cyan-600 hover:bg-cyan-700"
-    >
-      اشتراک‌گذاری صورتحساب (پیامک/واتس‌اپ)
-    </app-button>
+    @if (transactions().length > 0) {
+      <div class="animate-in fade-in slide-in-from-bottom duration-500">
+        <app-button
+          [variant]="'secondary'"
+          [fullWidth]="true"
+          [size]="'lg'"
+          (clicked)="shareStatement()"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5" r="3"></circle>
+            <circle cx="6" cy="12" r="3"></circle>
+            <circle cx="18" cy="19" r="3"></circle>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+          </svg>
+          اشتراک‌گذاری صورتحساب
+        </app-button>
+      </div>
+    }
   </div>
 </div>
 
@@ -183,41 +319,51 @@
   [title]="'ویرایش مشخصات شخص'"
   (closed)="closeEditPersonModal()"
 >
-  <div class="space-y-4">
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">نام:</label>
+  <div class="space-y-5">
+    <div class="space-y-2">
+      <label class="block text-sm font-semibold text-foreground">نام</label>
       <input
         type="text"
         [value]="editPersonName()"
         (input)="editPersonName.set($any($event.target).value)"
-        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+        placeholder="نام شخص را وارد کنید"
+        class="w-full h-11 px-3 py-2 border-2 border-input bg-background rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:border-ring/50 placeholder:text-muted-foreground"
       />
     </div>
     
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">شماره تلفن:</label>
+    <div class="space-y-2">
+      <label class="block text-sm font-semibold text-foreground">شماره تلفن</label>
       <input
         type="text"
         [value]="editPersonPhone()"
         (input)="editPersonPhone.set($any($event.target).value)"
-        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+        placeholder="شماره تلفن را وارد کنید"
+        class="w-full h-11 px-3 py-2 border-2 border-input bg-background rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:border-ring/50 placeholder:text-muted-foreground"
       />
     </div>
     
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">آدرس:</label>
+    <div class="space-y-2">
+      <label class="block text-sm font-semibold text-foreground">آدرس</label>
       <textarea
         [value]="editPersonAddress()"
         (input)="editPersonAddress.set($any($event.target).value)"
         rows="3"
-        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+        placeholder="آدرس را وارد کنید"
+        class="w-full px-3 py-2 border-2 border-input bg-background rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:border-ring/50 placeholder:text-muted-foreground resize-none"
       ></textarea>
     </div>
     
     <app-button 
       [fullWidth]="true"
+      [size]="'lg'"
       (clicked)="saveEditedPerson()"
+      class="mt-6"
     >
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+        <polyline points="7 3 7 8 15 8"></polyline>
+      </svg>
       ذخیره تغییرات
     </app-button>
   </div>
