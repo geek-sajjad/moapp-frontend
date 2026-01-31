@@ -1,59 +1,144 @@
-# DaftarMoeinV0
+# دفتر معین شخصی (Personal Ledger)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.2.
+A Persian/Farsi personal accounting ledger application built with Angular 21, TailwindCSS, and shadcn-ui design patterns.
 
-## Development server
+## Features
 
-To start a local development server, run:
+- ✅ User authentication (login/logout)
+- ✅ Manage people/contacts
+- ✅ Track transactions (debit/credit)
+- ✅ Calculate balances automatically
+- ✅ Search and filter
+- ✅ Export data to JSON
+- ✅ Share statements via SMS/WhatsApp
+- ✅ Fully responsive design
+- ✅ RTL (Right-to-Left) support for Persian
+- ✅ Local storage for data persistence
 
-```bash
-ng serve
-```
+## Technology Stack
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- **Angular 21** - Modern web framework
+- **TailwindCSS 4** - Utility-first CSS framework
+- **TypeScript** - Type-safe development
+- **Signals** - Reactive state management
+- **Local Storage** - Client-side data persistence
 
-## Code scaffolding
+## Getting Started
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Prerequisites
 
-```bash
-ng generate component component-name
-```
+- Node.js 18+ 
+- npm 10+
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+### Installation
 
 ```bash
-ng test
+# Install dependencies
+npm install
+
+# Start development server
+npm start
+
+# Build for production
+npm run build
 ```
 
-## Running end-to-end tests
+### Default Credentials
 
-For end-to-end (e2e) testing, run:
+- Username: `admin`
+- Password: `admin`
+
+## Project Structure
+
+```
+src/app/
+├── components/
+│   ├── login/              # Login component
+│   ├── person-list/        # People management
+│   ├── transaction-view/   # Transaction management
+│   └── ui/                 # Shared UI components
+├── models/                 # TypeScript interfaces
+├── services/               # Business logic and data services
+│   ├── auth.service.ts
+│   ├── person.service.ts
+│   ├── transaction.service.ts
+│   ├── export.service.ts
+│   ├── alert.service.ts
+│   └── date-util.service.ts
+└── guards/                 # Route guards
+    └── auth.guard.ts
+```
+
+## Features in Detail
+
+### Authentication
+Simple mock authentication system using local storage. Users must log in to access the application.
+
+### Person Management
+- Add new people/contacts
+- Edit person details (name, phone, address)
+- Delete people (with confirmation)
+- Search by name
+
+### Transaction Management
+- Record debit and credit transactions
+- Persian date support
+- Edit and delete transactions
+- Automatic balance calculation
+- Transaction history per person
+
+### Data Export
+- Export all data to JSON format
+- Share transaction statements via native share API or clipboard
+
+## Removed Features
+
+The following features from the original HTML version were removed as requested:
+- API integrations (all data is stored locally)
+- jQuery dependency
+- Font Awesome (replaced with inline buttons)
+- Persian Datepicker library (using browser native date input)
+
+## UI Components
+
+The application uses custom UI components following shadcn-ui patterns:
+- Button
+- Input
+- Textarea
+- Select
+- Modal
+- Confirm Dialog
+- Alert/Toast
+
+## Development
 
 ```bash
-ng e2e
+# Run development server
+npm start
+
+# Run tests
+npm test
+
+# Lint code
+npm run lint
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Browser Support
 
-## Additional Resources
+Modern browsers with ES6+ support:
+- Chrome/Edge 90+
+- Firefox 88+
+- Safari 14+
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## License
+
+This project is provided as-is for personal or educational use.
+
+## Converting from HTML
+
+This Angular application was converted from a raw HTML/CSS/jQuery project to use modern Angular 21 features:
+- Standalone components
+- Signals for reactive state
+- TailwindCSS for styling
+- TypeScript for type safety
+- Modular architecture

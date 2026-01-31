@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دفتر معین شخصی</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="./scripts/persian-datepicker.min.css">
+    <link rel="stylesheet" href="./scripts/font-awsome-all.min.css">
+    <style>
+        body {
+            font-family: 'B Nazanin', 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #005a8d;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .back-button, .delete-btn, .edit-btn {
+            padding: 5px 10px;
+            font-size: 1em;
+            margin: 0;
+            width: auto;
+        }
+        .back-button {
+            background-color: #6c757d;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        .delete-btn {
+            background-color: #f44336;
+        }
+        .edit-btn { /* Style for Edit button */
+            background-color: #ffc107;
+            color: #333;
+            margin-left: 5px;
+        }
+        .entry-list {
+            margin-top: 20px;
+        }
+        .entry {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .entry-clickable { /* Added class for clickable area */
+            cursor: pointer;
+            flex-grow: 1;
+            padding-right: 10px;
+        }
+        .entry:hover {
+            background-color: #f0f0f0;
+        }
+        .entry:last-child {
+            border-bottom: none;
+        }
+        .entry-details {
+            flex-grow: 1;
+        }
+        .entry-amount {
+            font-weight: bold;
+            font-size: 1.2em;
+            white-space: nowrap; /* Prevent wrapping for amount */
+        }
+        .debit {
+            color: #d9534f;
+        }
+        .credit {
+            color: #5cb85c;
+        }
+        .entry-person {
+            font-weight: bold;
+        }
+        .entry-date {
+            font-size: 0.8em;
+            color: #888;
+        }
+        .balance {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-top: 20px;
+            text-align: center;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+        }
+        .total-balance {
+            color: #005a8d;
+        }
+        .balance-label {
+            font-size: 0.9em;
+            color: #666;
+        }
+        .hidden {
+            display: none;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 400px; 
+            text-align: right;
+            position: relative;
+        }
+        .confirm-modal-buttons {
+            display: flex;
+            justify-content: space-around;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .confirm-modal-buttons button {
+            margin: 0;
+            flex-grow: 1;
+        }
+        .close-btn {
+            color: #aaa;
+            float: left;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            left: 15px;
+        }
+        .search-container {
+            margin-bottom: 20px;
+        }
+        .search-container input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: right;
+        }
+        .fab {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 24px;
+            line-height: 60px;
+            cursor: pointer;
+            z-index: 90;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .fab:hover {
+            opacity: 0.8;
+        }
+        .fab-add {
+            bottom: 30px;
+            left: 30px;
+            background-color: #007bff;
+        }
+        .fab-export {
+            bottom: 100px;
+            left: 30px;
+            background-color: #28a745;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: flex-start;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .action-buttons button {
+            width: auto;
+            padding: 10px 15px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        /* Styles for transaction type select box */
+        #transactionType {
+            font-weight: bold;
+        }
+        .transaction-debit {
+            color: #d9534f;
+            border-color: #d9534f;
+            background-color: #fdeaea; /* Light red background */
+        }
+        .transaction-credit {
+            color: #5cb85c;
+            border-color: #5cb85c;
+            background-color: #eafde9; /* Light green background */
+        }
+        /* Style for transaction actions container */
+        .transaction-actions {
+            display: flex;
+            gap: 5px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="login-view">
+        <h1>ورود به سیستم</h1>
+        <hr>
+        <div class="input-group">
+            <label>نام کاربری:</label>
+            <input type="text" id="username" placeholder="نام کاربری خود را وارد کنید">
+        </div>
+        <div class="input-group">
+            <label>رمز عبور:</label>
+            <input type="password" id="password" placeholder="رمز عبور خود را وارد کنید">
+        </div>
+        <button onclick="login()">ورود</button>
+        <div id="loginError" style="color: #d9534f; text-align: center; margin-top: 10px; display: none;"></div>
+    </div>
+
+    <div id="person-list-view" class="hidden">
+        <h1>دفتر معین شخصی</h1>
+        <div style="text-align: left; margin-bottom: 10px;">
+            <span id="welcomeUser" style="color: #666;"></span>
+            <button onclick="logout()" title="خروج" style="background-color: #dc3545; margin-left: 10px; padding: 5px; font-size: 1em;"><i class="fas fa-right-from-bracket"></i></button>
+        </div>
+        <hr>
+        <div class="search-container">
+            <input type="text" id="searchPersonInput" oninput="filterPeople()" placeholder="جستجو بر اساس نام...">
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h2>لیست افراد</h2>
+            <div class="action-buttons">
+                <button onclick="showAddPersonModal()" style="background-color: #007bff;">
+                    <i class="fas fa-plus"></i>
+                </button>
+                <button onclick="exportData()" style="background-color: #28a745;">
+                    <i class="fas fa-download"></i>
+                </button>
+            </div>
+        </div>
+        <div class="entry-list" id="personList"></div>
+    </div>
+
+    <div id="transaction-view" class="hidden">
+        <button class="back-button" onclick="showPeopleListView()">بازگشت به لیست افراد</button>
+        <h1 id="currentPersonName"></h1>
+        <div id="personDetails"></div>
+        <hr>
+        <h2>ثبت تراکنش</h2>
+        <div class="input-group"><label>تاریخ:</label><input type="text" id="transactionDate"></div>
+        <div class="input-group"><label>نوع تراکنش:</label>
+            <select id="transactionType" onchange="updateTransactionTypeStyle(this)">
+                <option value="debit">بدهکار (شما بدهکار هستید)</option>
+                <option value="credit">بستانکار (شما بستانکار هستید)</option>
+            </select>
+        </div>
+        <div class="input-group"><label>مبلغ (تومان):</label><input type="number" id="amount"></div>
+        <div class="input-group"><label>توضیحات:</label><textarea id="description"></textarea></div>
+        <button id="saveTransactionBtn" onclick="saveTransaction()">ثبت تراکنش</button>
+        <button id="cancelEditTransactionBtn" onclick="clearTransactionForm(true)" class="hidden" style="background-color: #6c757d;">لغو ویرایش</button>
+        <input type="hidden" id="editingTransactionId"> <hr>
+        <h2>تراکنش‌ها</h2>
+        <div class="entry-list" id="transactionList"></div>
+        <div class="balance"><span class="balance-label">مانده حساب:</span> <span id="totalBalance" class="total-balance">0 تومان</span></div>
+                <div class="action-buttons">
+            <button onclick="shareStatement()" style="background-color: #17a2b8; width: 100%;">
+                <i class="fas fa-share-nodes"></i> اشتراک‌گذاری صورتحساب (پیامک/واتس‌اپ)
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="addPersonModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeAddPersonModal()">&times;</span>
+        <h2>افزودن شخص جدید</h2>
+        <div class="input-group"><label>نام:</label><input type="text" id="newPersonName"></div>
+        <div class="input-group"><label>شماره تلفن:</label><input type="text" id="newPersonPhone"></div>
+        <div class="input-group"><label>آدرس:</label><textarea id="newPersonAddress"></textarea></div>
+        <button onclick="addPerson()">ثبت شخص</button>
+    </div>
+</div>
+
+<div id="editPersonModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeEditPersonModal()">&times;</span>
+        <h2>ویرایش مشخصات شخص</h2>
+        <input type="hidden" id="editPersonId">
+        <div class="input-group"><label>نام:</label><input type="text" id="editPersonName"></div>
+        <div class="input-group"><label>شماره تلفن:</label><input type="text" id="editPersonPhone"></div>
+        <div class="input-group"><label>آدرس:</label><textarea id="editPersonAddress"></textarea></div>
+        <button onclick="saveEditedPerson()">ذخیره تغییرات</button>
+    </div>
+</div>
+
+<div id="confirmModal" class="modal">
+    <div class="modal-content">
+        <p id="confirmMessage"></p>
+        <div class="confirm-modal-buttons">
+            <button id="confirmYes">بله</button>
+            <button id="confirmNo">خیر</button>
+        </div>
+    </div>
+</div>
+
+<div id="alertModal" class="modal"><div class="modal-content"><p id="alertMessage"></p></div></div>
+
+<script src="./scripts/jquery-3.6.0.min.js"></script>
+<script src="./scripts/persian-date.min.js"></script>
+<script src="./scripts/persian-datepicker.min.js"></script>
+<script>
+    let currentPersonId = null;
+    let allPeople = [];
+    let allTransactions = []; // Store transactions list for easy access during edit
+    let authToken = null;
+    let currentUser = null;
+
+    // const API_URL = "https://elastic-carver-cjowkk-mt.liara.run/api";
+    const API_URL = "http://31.25.132.143:5000/api";
+
+
+    // function shareStatement() {
+    //     if (allTransactions.length === 0) {
+    //         showAlert("تراکنشی برای ارسال وجود ندارد.");
+    //         return;
+    //     }
+
+    //     const personName = document.getElementById("currentPersonName").textContent.replace("تراکنش‌های ", "");
+    //     let total = 0;
+    //     let message = `صورتحساب: ${personName}\n`;
+    //     message += `تاریخ: ${new persianDate().format('YYYY/MM/DD')}\n`;
+    //     message += `------------------\n`;
+
+    //     allTransactions.forEach(t => {
+    //         let type = t.type === "debit" ? "بدهکار" : "بستانکار";
+    //         message += `${t.date}: ${t.amount.toLocaleString('fa-IR')} (${type})\n`;
+    //         total += t.type === "debit" ? -t.amount : t.amount;
+    //     });
+
+    //     message += `------------------\n`;
+    //     message += `مانده نهایی: ${total.toLocaleString('fa-IR')} تومان\n`;
+    //     message += total < 0 ? "(شما بدهکار هستید)" : "(شما بستانکار هستید)";
+
+    //     // چک کردن قابلیت Share در گوشی
+    //     if (navigator.share) {
+    //         navigator.share({
+    //             title: 'صورتحساب معین',
+    //             text: message
+    //         }).catch(console.error);
+    //     } else {
+    //         // اگر مرورگر از Share پشتیبانی نکند (مثلاً در دسکتاپ قدیمی)
+    //         const dummy = document.createElement("textarea");
+    //         document.body.appendChild(dummy);
+    //         dummy.value = message;
+    //         dummy.select();
+    //         document.execCommand("copy");
+    //         document.body.removeChild(dummy);
+    //         showAlert("متن صورتحساب کپی شد. می‌توانید آن را در پیامک بچسبانید (Paste کنید).");
+    //     }
+    // }
+  function shareStatement() {
+        if (allTransactions.length === 0) {
+            showAlert("تراکنشی برای ارسال وجود ندارد.");
+            return;
+        }
+
+        const personName = document.getElementById("currentPersonName").textContent.replace("تراکنش‌های ", "");
+        let total = 0;
+        let message = `📄 صورت‌حساب: ${personName}\n`;
+        message += `📅 تاریخ: ${new persianDate().format('YYYY/MM/DD')}\n`;
+        message += `--------------------------\n`;
+
+        allTransactions.forEach(t => {
+            let type = t.type === "debit" ? "طلبتان" : "بدهی‌تان";
+            message += `${t.date}: ${t.amount.toLocaleString('fa-IR')} تومان (${type})\n`;
+            total += t.type === "debit" ? t.amount : -t.amount;
+        });
+
+        message += `--------------------------\n`;
+        message += `💰 مانده نهایی: ${Math.abs(total).toLocaleString('fa-IR')} تومان\n`;
+        message += total >= 0 ? "🔵 طلبکار هستید" : "🔴 بدهکار هستید";
+        message += `\n +دفتر معین شخصی  | پرنده سرای رفیعی+`
+
+        if (navigator.share) {
+            navigator.share({ title: 'صورت‌حساب', text: message }).catch(console.error);
+        } else {
+            const el = document.createElement('textarea');
+            el.value = message;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            showAlert("متن صورت‌حساب کپی شد. می‌توانید آن را پیامک کنید.");
+        }
+    }
+    
+    function showAlert(msg) {
+        document.getElementById("alertMessage").textContent = msg;
+        document.getElementById("alertModal").style.display = "flex";
+        setTimeout(() => {
+            document.getElementById("alertModal").style.display = "none";
+        }, 2000);
+    }
+
+    function showConfirm(msg, callback) {
+        document.getElementById("confirmMessage").textContent = msg;
+        document.getElementById("confirmModal").style.display = "flex";
+        
+        document.getElementById("confirmYes").onclick = () => {
+            document.getElementById("confirmModal").style.display = "none";
+            callback(true);
+        };
+        document.getElementById("confirmNo").onclick = () => {
+            document.getElementById("confirmModal").style.display = "none";
+            callback(false);
+        };
+    }
+
+    function showView(id) {
+        document.getElementById("login-view").classList.add("hidden");
+        document.getElementById("person-list-view").classList.add("hidden");
+        document.getElementById("transaction-view").classList.add("hidden");
+        document.getElementById(id).classList.remove("hidden");
+    }
+    
+    function showPeopleListView() {
+        showView("person-list-view");
+        loadPeople();
+    }
+
+    // --- Authentication Functions ---
+    
+    async function login() {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        const errorDiv = document.getElementById("loginError");
+        
+        if (!username || !password) {
+            errorDiv.textContent = "لطفاً نام کاربری و رمز عبور را وارد کنید.";
+            errorDiv.style.display = "block";
+            return;
+        }
+        
+        try {
+            const res = await fetch(`${API_URL}/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password })
+            });
+            
+            if (!res.ok) {
+                const errorData = await res.json();
+                throw new Error(errorData.error || "خطا در ورود");
+            }
+            
+            const data = await res.json();
+            authToken = data.token;
+            currentUser = data.username;
+            
+            // Store token in localStorage for persistence
+            localStorage.setItem('authToken', authToken);
+            localStorage.setItem('currentUser', currentUser);
+            
+            // Show welcome message and main view
+            document.getElementById("welcomeUser").textContent = `خوش آمدید، ${currentUser}`;
+            showView("person-list-view");
+            loadPeople();
+            
+        } catch (error) {
+            console.error("Login error:", error);
+            errorDiv.textContent = error.message;
+            errorDiv.style.display = "block";
+        }
+    }
+    
+    function logout() {
+        authToken = null;
+        currentUser = null;
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('currentUser');
+        showView("login-view");
+        
+        // Clear form
+        document.getElementById("username").value = "";
+        document.getElementById("password").value = "";
+        document.getElementById("loginError").style.display = "none";
+    }
+    
+    function checkAuth() {
+        const storedToken = localStorage.getItem('authToken');
+        const storedUser = localStorage.getItem('currentUser');
+        
+        if (storedToken && storedUser) {
+            authToken = storedToken;
+            currentUser = storedUser;
+            document.getElementById("welcomeUser").textContent = `خوش آمدید، ${currentUser}`;
+            showView("person-list-view");
+            loadPeople();
+            return true;
+        }
+        return false;
+    }
+    
+    // Helper function to make authenticated API calls
+    function getAuthHeaders() {
+        return {
+            "Content-Type": "application/json",
+            "Authorization": authToken
+        };
+    }
+
+    // --- توابع اصلی برنامه ---
+
+    async function loadPeople() {
+        try {
+            const res = await fetch(`${API_URL}/people`, {
+                headers: getAuthHeaders()
+            });
+            if (!res.ok) {
+                if (res.status === 401) {
+                    logout();
+                    return;
+                }
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            const people = await res.json();
+            allPeople = people;
+            filterPeople();
+        } catch (error) {
+            console.error("خطا در بارگذاری افراد:", error);
+            showAlert("خطا در بارگذاری افراد از سرور");
+        }
+    }
+
+    async function addPerson() {
+        const name = document.getElementById("newPersonName").value;
+        const phone = document.getElementById("newPersonPhone").value;
+        const address = document.getElementById("newPersonAddress").value;
+        if (!name) { showAlert("لطفاً نام شخص را وارد کنید."); return; }
+        
+        const newPerson = { name, phone, address };
+
+        try {
+            const res = await fetch(`${API_URL}/people`, {
+                method: "POST",
+                headers: getAuthHeaders(),
+                body: JSON.stringify(newPerson)
+            });
+            
+            if (!res.ok) {
+                if (res.status === 401) {
+                    logout();
+                    return;
+                }
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            
+            showAlert("شخص با موفقیت اضافه شد.");
+            closeAddPersonModal();
+            loadPeople();
+        } catch (error) {
+            console.error("خطا در افزودن شخص:", error);
+            showAlert("خطا در افزودن شخص.");
+        }
+    }
+    
+    // Function to display the Edit Person Modal
+    function showEditPersonModal(personId) {
+        const person = allPeople.find(p => p._id === personId);
+        if (!person) {
+            showAlert("شخص مورد نظر یافت نشد.");
+            return;
+        }
+        document.getElementById("editPersonId").value = person._id;
+        document.getElementById("editPersonName").value = person.name;
+        document.getElementById("editPersonPhone").value = person.phone || "";
+        document.getElementById("editPersonAddress").value = person.address || "";
+        document.getElementById("editPersonModal").style.display = "flex";
+    }
+    
+    // Function to close the Edit Person Modal
+    function closeEditPersonModal() {
+        document.getElementById("editPersonModal").style.display = "none";
+    }
+    
+    // Function to save the edited person details
+    async function saveEditedPerson() {
+        const id = document.getElementById("editPersonId").value;
+        const name = document.getElementById("editPersonName").value;
+        const phone = document.getElementById("editPersonPhone").value;
+        const address = document.getElementById("editPersonAddress").value;
+        
+        if (!name) { showAlert("لطفاً نام شخص را وارد کنید."); return; }
+        
+        const updatedPerson = { name, phone, address };
+
+        try {
+            const res = await fetch(`${API_URL}/people/${id}`, {
+                method: "PUT", 
+                headers: getAuthHeaders(),
+                body: JSON.stringify(updatedPerson)
+            });
+            
+            if (!res.ok) {
+                if (res.status === 401) {
+                    logout();
+                    return;
+                }
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            
+            showAlert("مشخصات شخص با موفقیت به‌روزرسانی شد.");
+            closeEditPersonModal();
+            loadPeople();
+            // If we are currently on the transaction view, we need to refresh person details
+            if (currentPersonId === id) {
+                 // Find the updated person in the list to refresh details
+                 const refreshedPerson = allPeople.find(p => p._id === id)
+                 if (refreshedPerson) {
+                    document.getElementById("personDetails").innerHTML = `
+                        ${refreshedPerson.phone ? `<p><strong>شماره تلفن:</strong> ${refreshedPerson.phone}</p>` : ""} 
+                        ${refreshedPerson.address ? `<p><strong>آدرس:</strong> ${refreshedPerson.address}</p>` : ""}
+                        <button class="edit-btn back-button" onclick="showEditPersonModal('${refreshedPerson._id}')" style="margin-bottom: 0;">
+                            <i class="fas fa-edit"></i> ویرایش مشخصات
+                        </button>
+                    `;
+                 }
+            }
+        } catch (error) {
+            console.error("خطا در به‌روزرسانی شخص:", error);
+            showAlert("خطا در به‌روزرسانی شخص.");
+        }
+    }
+
+
+    function filterPeople() {
+        const term = document.getElementById("searchPersonInput").value.toLowerCase();
+        const filtered = allPeople.filter(p => p.name.toLowerCase().includes(term));
+        renderPeople(filtered);
+    }
+    
+    function renderPeople(people) {
+        const el = document.getElementById("personList");
+        el.innerHTML = "";
+        if (people.length === 0) {
+            el.innerHTML = "<p style='text-align:center;color:#888;'>هیچ شخصی یافت نشد.</p>";
+        }
+        people.forEach(p => {
+            const div = document.createElement("div");
+            div.classList.add("entry");
+            
+            // Clickable area to view transactions
+            const clickableDiv = document.createElement("div");
+            clickableDiv.classList.add("entry-clickable");
+            clickableDiv.innerHTML = `<span class="entry-person">${p.name}</span>`;
+            clickableDiv.addEventListener("click", () => showTransactionsView(p));
+            
+            // Action buttons container
+            const actionContainer = document.createElement("div");
+            actionContainer.style.display = 'flex';
+            
+            // Edit Button
+            const editBtn = document.createElement("button");
+            editBtn.classList.add("edit-btn");
+            editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+            editBtn.title = 'ویرایش مشخصات';
+            editBtn.onclick = (e) => {
+                e.stopPropagation(); 
+                showEditPersonModal(p._id);
+            };
+            actionContainer.appendChild(editBtn);
+            
+            // Delete Button
+            const deleteBtn = document.createElement("button");
+            deleteBtn.classList.add("delete-btn");
+            deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+            deleteBtn.title = 'حذف شخص';
+            deleteBtn.onclick = (e) => deletePerson(e, p._id);
+            actionContainer.appendChild(deleteBtn);
+
+            div.appendChild(clickableDiv);
+            div.appendChild(actionContainer);
+            el.appendChild(div);
+        });
+    }
+
+    function deletePerson(event, id) {
+        event.stopPropagation();
+        showConfirm("آیا از حذف این شخص و تمام تراکنش‌های مرتبط با او مطمئن هستید؟", async isConfirmed => {
+            if (isConfirmed) {
+                try {
+                    const res = await fetch(`${API_URL}/people/${id}`, {
+                        method: "DELETE",
+                        headers: getAuthHeaders()
+                    });
+                    
+                    if (!res.ok) {
+                        if (res.status === 401) {
+                            logout();
+                            return;
+                        }
+                        throw new Error(`HTTP error! status: ${res.status}`);
+                    }
+                    
+                    showAlert("شخص با موفقیت حذف شد.");
+                    loadPeople();
+                } catch (error) {
+                    console.error("خطا در حذف شخص:", error);
+                    showAlert("خطا در حذف شخص.");
+                }
+            }
+        });
+    }
+
+    async function showTransactionsView(person) {
+        currentPersonId = person._id;
+        showView("transaction-view");
+        document.getElementById("currentPersonName").textContent = `تراکنش‌های ${person.name}`;
+        
+        // Show person details with a small edit button for quick access
+        document.getElementById("personDetails").innerHTML = `
+            ${person.phone ? `<p><strong>شماره تلفن:</strong> ${person.phone}</p>` : ""} 
+            ${person.address ? `<p><strong>آدرس:</strong> ${person.address}</p>` : ""}
+            <button class="edit-btn back-button" onclick="showEditPersonModal('${person._id}')" style="margin-bottom: 0;">
+                <i class="fas fa-edit"></i> ویرایش مشخصات
+            </button>
+        `;
+        
+        await loadTransactions(currentPersonId);
+        
+        // Ensure date picker is initialized
+        $('#transactionDate').persianDatepicker({
+            persianDigit: true,
+            format: 'YYYY/MM/DD'
+        });
+        
+        clearTransactionForm(true); // Clear form and reset to Add mode
+        // Set initial style for transactionType
+        updateTransactionTypeStyle(document.getElementById("transactionType"));
+    }
+    
+    // Function to update the style of the select box based on the selected value
+    function updateTransactionTypeStyle(selectElement) {
+        // Remove existing classes
+        selectElement.classList.remove("transaction-debit", "transaction-credit");
+
+        // Apply new class based on value
+        if (selectElement.value === "debit") {
+            selectElement.classList.add("transaction-debit");
+        } else if (selectElement.value === "credit") {
+            selectElement.classList.add("transaction-credit");
+        }
+    }
+
+
+    async function loadTransactions(personId) {
+        try {
+            const res = await fetch(`${API_URL}/transactions/${personId}`, {
+                headers: getAuthHeaders()
+            });
+            if (!res.ok) {
+                if (res.status === 401) {
+                    logout();
+                    return;
+                }
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            const transactions = await res.json();
+            allTransactions = transactions; // Store the list globally
+            renderTransactions(transactions);
+        } catch (error) {
+            console.error("خطا در بارگذاری تراکنش‌ها:", error);
+            showAlert("خطا در بارگذاری تراکنش‌ها از سرور");
+        }
+    }
+
+    // Function to handle both Add and Update transaction
+    async function saveTransaction() {
+        const id = document.getElementById("editingTransactionId").value;
+        const isEditing = !!id;
+        
+        const date = document.getElementById("transactionDate").value;
+        const type = document.getElementById("transactionType").value;
+        const amount = document.getElementById("amount").value;
+        const description = document.getElementById("description").value;
+        
+        if (!amount || isNaN(parseFloat(amount))) { showAlert("لطفاً مبلغ را به درستی وارد کنید."); return; }
+        
+        const transactionData = { personId: currentPersonId, date, type, amount: parseFloat(amount), description };
+        
+        try {
+            const method = isEditing ? "PUT" : "POST";
+            const url = isEditing ? `${API_URL}/transactions/${id}` : `${API_URL}/transactions`;
+
+            const res = await fetch(url, {
+                method: method,
+                headers: getAuthHeaders(),
+                body: JSON.stringify(transactionData)
+            });
+            
+            if (!res.ok) {
+                if (res.status === 401) {
+                    logout();
+                    return;
+                }
+                const errorData = await res.json();
+                throw new Error(errorData.error || `HTTP error! status: ${res.status}`);
+            }
+            
+            showAlert(`تراکنش با موفقیت ${isEditing ? 'به‌روزرسانی' : 'ثبت'} شد.`);
+            clearTransactionForm(true); // Clear form and reset to Add mode
+            loadTransactions(currentPersonId);
+        } catch (error) {
+            console.error(`خطا در ${isEditing ? 'به‌روزرسانی' : 'افزودن'} تراکنش:`, error);
+            showAlert(`خطا در ${isEditing ? 'به‌روزرسانی' : 'افزودن'} تراکنش.`);
+        }
+    }
+    
+    // Function to load transaction details into the form for editing
+    function editTransaction(event, transactionId) {
+        event.stopPropagation();
+        
+        const transaction = allTransactions.find(t => t._id === transactionId);
+        if (!transaction) return;
+
+        // Set form values for editing
+        document.getElementById("editingTransactionId").value = transaction._id;
+        document.getElementById("transactionDate").value = transaction.date;
+        document.getElementById("transactionType").value = transaction.type;
+        document.getElementById("amount").value = transaction.amount;
+        document.getElementById("description").value = transaction.description;
+        
+        // Update button text and visibility
+        document.getElementById("saveTransactionBtn").textContent = "ذخیره تغییرات";
+        document.getElementById("cancelEditTransactionBtn").classList.remove("hidden");
+        
+        // Apply coloring style based on the transaction type
+        updateTransactionTypeStyle(document.getElementById("transactionType"));
+        
+        // Scroll to the form
+        document.getElementById("transaction-view").scrollIntoView({ behavior: 'smooth' });
+    }
+
+    
+    function renderTransactions(trs) {
+        const el = document.getElementById("transactionList");
+        el.innerHTML = "";
+        let total = 0;
+        if (trs.length === 0) {
+            el.innerHTML = "<p style='text-align:center;color:#888;'>هیچ تراکنشی ثبت نشده است.</p>";
+        }
+        trs.forEach(t => {
+            const div = document.createElement("div");
+            div.classList.add("entry");
+            let sign = t.type === "debit" ? "-" : "+";
+            let colorClass = t.type === "debit" ? "debit" : "credit";
+            total += t.type === "debit" ? -t.amount : t.amount;
+            
+            // Transaction Details
+            div.innerHTML = `
+                <div class="entry-details">
+                    <div class="entry-date">${t.date}</div>
+                    <div>${t.description}</div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="entry-amount ${colorClass}">
+                        ${sign}${t.amount.toLocaleString('fa-IR')}
+                    </div>
+                    <div class="transaction-actions">
+                        <button class="edit-btn" onclick="editTransaction(event, '${t._id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="delete-btn" onclick="deleteTransaction(event, '${t._id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            el.appendChild(div);
+        });
+        const balance = document.getElementById("totalBalance");
+        balance.textContent = `${total.toLocaleString('fa-IR')} تومان`;
+        balance.style.color = total < 0 ? "#d9534f" : "#5cb85c";
+    }
+
+    function deleteTransaction(event, id) {
+        event.stopPropagation();
+        showConfirm("آیا از حذف این تراکنش مطمئن هستید؟", async isConfirmed => {
+            if (isConfirmed) {
+                try {
+                    const res = await fetch(`${API_URL}/transactions/${id}`, {
+                        method: "DELETE",
+                        headers: getAuthHeaders()
+                    });
+                    
+                    if (!res.ok) {
+                        if (res.status === 401) {
+                            logout();
+                            return;
+                        }
+                        throw new Error(`HTTP error! status: ${res.status}`);
+                    }
+                    
+                    showAlert("تراکنش با موفقیت حذف شد.");
+                    loadTransactions(currentPersonId);
+                } catch (error) {
+                    console.error("خطا در حذف تراکنش:", error);
+                    showAlert("خطا در حذف تراکنش.");
+                }
+            }
+        });
+    }
+
+    function clearTransactionForm(resetToAddMode = false) {
+        document.getElementById("editingTransactionId").value = "";
+        document.getElementById("amount").value = "";
+        document.getElementById("description").value = "";
+        document.getElementById("transactionDate").value = "";
+        document.getElementById("transactionType").value = "debit"; // Reset to default
+        updateTransactionTypeStyle(document.getElementById("transactionType"));
+
+        if (resetToAddMode) {
+            document.getElementById("saveTransactionBtn").textContent = "ثبت تراکنش";
+            document.getElementById("cancelEditTransactionBtn").classList.add("hidden");
+        }
+    }
+
+    async function exportData() {
+        try {
+            const [peopleRes, transactionsRes] = await Promise.all([
+                fetch(`${API_URL}/people`, { headers: getAuthHeaders() }),
+                fetch(`${API_URL}/transactions`, { headers: getAuthHeaders() })
+            ]);
+            
+            if (!peopleRes.ok || !transactionsRes.ok) {
+                if (peopleRes.status === 401 || transactionsRes.status === 401) {
+                    logout();
+                    return;
+                }
+                throw new Error("خطا در دریافت اطلاعات از سرور");
+            }
+            
+            const [people, transactions] = await Promise.all([
+                peopleRes.json(),
+                transactionsRes.json()
+            ]);
+            
+            const data = { people, transactions };
+            const jsonData = JSON.stringify(data, null, 2);
+            const blob = new Blob([jsonData], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `moein-data-${new Date().toLocaleDateString('fa-IR').replace(/\//g, '-')}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showAlert("خروجی با موفقیت ایجاد شد.");
+        } catch (error) {
+            console.error("خطا در خروجی گرفتن اطلاعات:", error);
+            showAlert("خطا در خروجی گرفتن اطلاعات.");
+        }
+    }
+    
+    function showAddPersonModal() {
+        document.getElementById("addPersonModal").style.display = "flex";
+        document.getElementById("newPersonName").value = "";
+        document.getElementById("newPersonPhone").value = "";
+        document.getElementById("newPersonAddress").value = "";
+    }
+    function closeAddPersonModal() {
+        document.getElementById("addPersonModal").style.display = "none";
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+        if ('serviceWorker' in navigator) {
+            try {
+                const registration = await navigator.serviceWorker.register('service-worker.js');
+                console.log('Service Worker registered with scope:', registration.scope);
+            } catch (error) {
+                console.error('Service Worker registration failed:', error);
+            }
+        }
+
+        // Check if user is already authenticated
+        if (!checkAuth()) {
+            showView("login-view");
+        }
+    });
+</script>
+
+</body>
+</html>
