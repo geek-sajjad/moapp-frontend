@@ -12,25 +12,25 @@ export class ExportService {
     private transactionService: TransactionService
   ) {}
 
-  exportToJson(): void {
-    const data = {
-      people: this.personService.getAllPeople(),
-      transactions: this.transactionService.getAllTransactions()
-    };
+  // exportToJson(): void {
+  //   const data = {
+  //     people: this.personService.getAllPeople(),
+  //     transactions: this.transactionService.getAllTransactions()
+  //   };
 
-    const jsonData = JSON.stringify(data, null, 2);
-    const blob = new Blob([jsonData], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+  //   const jsonData = JSON.stringify(data, null, 2);
+  //   const blob = new Blob([jsonData], { type: 'application/json' });
+  //   const url = URL.createObjectURL(blob);
+  //   const a = document.createElement('a');
     
-    const date = new Date().toLocaleDateString('fa-IR').replace(/\//g, '-');
-    a.href = url;
-    a.download = `moein-data-${date}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }
+  //   const date = new Date().toLocaleDateString('fa-IR').replace(/\//g, '-');
+  //   a.href = url;
+  //   a.download = `moein-data-${date}.json`;
+  //   document.body.appendChild(a);
+  //   a.click();
+  //   document.body.removeChild(a);
+  //   URL.revokeObjectURL(url);
+  // }
 
   shareStatement(personName: string, transactions: any[]): void {
     if (transactions.length === 0) {

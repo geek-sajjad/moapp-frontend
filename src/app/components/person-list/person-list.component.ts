@@ -11,6 +11,7 @@ import { Person, CreatePersonDto } from '../../models/person.model';
 import { ButtonComponent } from '../ui/button/button.component';
 import { ModalComponent } from '../ui/modal/modal.component';
 import { ConfirmDialogComponent } from '../ui/confirm-dialog/confirm-dialog.component';
+import { IconComponent } from '../ui/icon/icon.component';
 
 @Component({
   selector: 'app-person-list',
@@ -19,7 +20,8 @@ import { ConfirmDialogComponent } from '../ui/confirm-dialog/confirm-dialog.comp
     FormsModule, 
     ButtonComponent, 
     ModalComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    IconComponent
   ],
   templateUrl: './person-list.component.html',
   styles: []
@@ -135,11 +137,11 @@ export class PersonListComponent implements OnInit {
     }
   }
 
-  confirmDeletePerson(personId: string): void {
-    this.confirmMessage.set('آیا از حذف این شخص و تمام تراکنش‌های مرتبط با او مطمئن هستید؟');
-    this.confirmCallback.set(() => this.deletePerson(personId));
-    this.showConfirmDialog.set(true);
-  }
+  // confirmDeletePerson(personId: string): void {
+  //   this.confirmMessage.set('آیا از حذف این شخص و تمام تراکنش‌های مرتبط با او مطمئن هستید؟');
+  //   this.confirmCallback.set(() => this.deletePerson(personId));
+  //   this.showConfirmDialog.set(true);
+  // }
 
   deletePerson(personId: string): void {
     this.transactionService.deleteTransactionsByPersonId(personId);
@@ -166,10 +168,10 @@ export class PersonListComponent implements OnInit {
     this.router.navigate(['/transactions', person.id]);
   }
 
-  exportData(): void {
-    this.exportService.exportToJson();
-    this.alertService.showSuccess('خروجی با موفقیت ایجاد شد.');
-  }
+  // exportData(): void {
+  //   this.exportService.exportToJson();
+  //   this.alertService.showSuccess('خروجی با موفقیت ایجاد شد.');
+  // }
 
   logout(): void {
     this.authService.logout();

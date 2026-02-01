@@ -4,10 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { AlertService } from '../../services/alert.service';
 import { ButtonComponent } from '../ui/button/button.component';
+import { IconComponent } from '../ui/icon/icon.component';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule, ButtonComponent],
+  imports: [FormsModule, ButtonComponent, IconComponent],
   templateUrl: './login.component.html',
   styles: [],
 })

@@ -12,6 +12,7 @@ import { Transaction, CreateTransactionDto } from '../../models/transaction.mode
 import { ButtonComponent } from '../ui/button/button.component';
 import { ModalComponent } from '../ui/modal/modal.component';
 import { ConfirmDialogComponent } from '../ui/confirm-dialog/confirm-dialog.component';
+import { IconComponent } from '../ui/icon/icon.component';
 
 @Component({
   selector: 'app-transaction-view',
@@ -20,7 +21,8 @@ import { ConfirmDialogComponent } from '../ui/confirm-dialog/confirm-dialog.comp
     FormsModule,
     ButtonComponent,
     ModalComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    IconComponent
   ],
   templateUrl: './transaction-view.component.html',
   styles: []
@@ -117,22 +119,22 @@ export class TransactionViewComponent implements OnInit {
     this.loadTransactions(this.personId());
   }
 
-  editTransaction(transaction: Transaction): void {
-    this.editingTransactionId.set(transaction.id);
-    this.transactionDate.set(transaction.date);
-    this.transactionType.set(transaction.type);
-    this.transactionAmount.set(transaction.amount.toString());
-    this.transactionDescription.set(transaction.description);
+  // editTransaction(transaction: Transaction): void {
+  //   this.editingTransactionId.set(transaction.id);
+  //   this.transactionDate.set(transaction.date);
+  //   this.transactionType.set(transaction.type);
+  //   this.transactionAmount.set(transaction.amount.toString());
+  //   this.transactionDescription.set(transaction.description);
     
-    // Scroll to form
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+  //   // Scroll to form
+  //   window.scrollTo({ top: 0, behavior: 'smooth' });
+  // }
 
-  confirmDeleteTransaction(transactionId: string): void {
-    this.confirmMessage.set('آیا از حذف این تراکنش مطمئن هستید؟');
-    this.confirmCallback.set(() => this.deleteTransaction(transactionId));
-    this.showConfirmDialog.set(true);
-  }
+  // confirmDeleteTransaction(transactionId: string): void {
+  //   this.confirmMessage.set('آیا از حذف این تراکنش مطمئن هستید؟');
+  //   this.confirmCallback.set(() => this.deleteTransaction(transactionId));
+  //   this.showConfirmDialog.set(true);
+  // }
 
   deleteTransaction(transactionId: string): void {
     const success = this.transactionService.deleteTransaction(transactionId);
