@@ -1,0 +1,51 @@
+<div class="bg-white rounded-xl shadow-xl border border-gray-300 overflow-hidden animate-fade-in-down duration-300">
+  <div class="bg-gradient-to-r from-blue-100 to-gray-100 px-5 py-4 border-b border-gray-300">
+    <div class="flex flex-col gap-3">
+      <div class="flex items-center gap-3.5">
+        <div class="w-14 h-14 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+          <app-icon name="user" [size]="26" class="text-blue-600" />
+        </div>
+        <div class="flex-grow min-w-0">
+          <h1 class="text-2xl font-extrabold text-gray-900 truncate">{{ person().name }}</h1>
+          @if (person().phone || person().address) {
+            <div class="text-sm text-gray-600 font-medium mt-2 space-y-1">
+              @if (person().phone) {
+                <div class="flex items-center gap-2">
+                  <app-icon name="phone" [size]="14" />
+                  <span class="truncate">{{ person().phone }}</span>
+                </div>
+              }
+              @if (person().address) {
+                <div class="flex items-center gap-2">
+                  <app-icon name="map-pin" [size]="14" />
+                  <span class="truncate">{{ person().address }}</span>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+      <app-button
+        [variant]="'outline'"
+        [size]="'sm'"
+        (clicked)="handleEdit()"
+        class="self-start"
+      >
+        <app-icon name="edit" [size]="14" />
+        ویرایش مشخصات
+      </app-button>
+    </div>
+  </div>
+
+  <!-- Balance Display -->
+  <div class="px-5 py-5 bg-gradient-to-r from-blue-50 to-gray-50 border-t border-gray-200">
+    <div class="flex flex-col items-center justify-center gap-2">
+      <span class="text-gray-600 font-bold text-sm">مانده حساب</span>
+      <div 
+        [class]="'text-3xl font-extrabold tracking-tight ' + (balance() < 0 ? 'text-red-600' : balance() > 0 ? 'text-green-600' : 'text-gray-600')"
+      >
+        {{ formatNumber(balance()) }} تومان
+      </div>
+    </div>
+  </div>
+</div>

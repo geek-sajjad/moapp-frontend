@@ -13,6 +13,10 @@ import { ButtonComponent } from '../ui/button/button.component';
 import { ModalComponent } from '../ui/modal/modal.component';
 import { ConfirmDialogComponent } from '../ui/confirm-dialog/confirm-dialog.component';
 import { IconComponent } from '../ui/icon/icon.component';
+import { PersonInfoCardComponent } from './person-info-card/person-info-card.component';
+import { TransactionFormComponent, TransactionFormData } from './transaction-form/transaction-form.component';
+import { TransactionListComponent } from './transaction-list/transaction-list.component';
+import { EditPersonFormComponent, PersonFormData } from './edit-person-form/edit-person-form.component';
 
 @Component({
   selector: 'app-transaction-view',
@@ -22,7 +26,11 @@ import { IconComponent } from '../ui/icon/icon.component';
     ButtonComponent,
     ModalComponent,
     ConfirmDialogComponent,
-    IconComponent
+    IconComponent,
+    PersonInfoCardComponent,
+    TransactionFormComponent,
+    TransactionListComponent,
+    EditPersonFormComponent
   ],
   templateUrl: './transaction-view.component.html',
   styles: []
@@ -47,18 +55,22 @@ export class TransactionViewComponent implements OnInit {
   });
 
   // Transaction Form
-  transactionDate = signal<string>('');
-  transactionType = signal<'debit' | 'credit'>('debit');
-  transactionAmount = signal<string>('');
-  transactionDescription = signal<string>('');
+  transactionFormData = signal<TransactionFormData>({
+    date: '',
+    type: 'debit',
+    amount: '',
+    description: ''
+  });
   editingTransactionId = signal<string>('');
   isEditing = computed(() => !!this.editingTransactionId());
 
   // Edit Person Modal
   showEditPersonModal = signal<boolean>(false);
-  editPersonName = signal<string>('');
-  editPersonPhone = signal<string>('');
-  editPersonAddress = signal<string>('');
+  editPersonData = signal<PersonFormData>({
+    name: '',
+    phone: '',
+    address: ''
+  });
 
   // Confirm Dialog
   showConfirmDialog = signal<boolean>(false);
@@ -72,7 +84,12 @@ export class TransactionViewComponent implements OnInit {
         this.personId.set(id);
         this.loadPersonData(id);
         this.loadTransactions(id);
-        this.transactionDate.set(this.dateUtil.getCurrentPersianDate());
+        this.transactionFormData.set({
+          date: this.dateUtil.getCurrentPersianDate(),
+          type: 'debit',
+          amount: '',
+          description: ''
+        });
       }
     });
   }
@@ -87,8 +104,8 @@ export class TransactionViewComponent implements OnInit {
     this.transactions.set(trans);
   }
 
-  saveTransaction(): void {
-    const amount = parseFloat(this.transactionAmount());
+  saveTransaction(formData: TransactionFormData): void {
+    const amount = parseFloat(formData.amount);
     
     if (isNaN(amount) || amount <= 0) {
       this.alertService.showError('لطفاً مبلغ را به درستی وارد کنید.');
@@ -97,10 +114,10 @@ export class TransactionViewComponent implements OnInit {
 
     const dto: CreateTransactionDto = {
       personId: this.personId(),
-      date: this.transactionDate(),
-      type: this.transactionType(),
+      date: formData.date,
+      type: formData.type,
       amount: amount,
-      description: this.transactionDescription()
+      description: formData.description
     };
 
     if (this.isEditing()) {
@@ -149,10 +166,12 @@ export class TransactionViewComponent implements OnInit {
 
   clearTransactionForm(): void {
     this.editingTransactionId.set('');
-    this.transactionDate.set(this.dateUtil.getCurrentPersianDate());
-    this.transactionType.set('debit');
-    this.transactionAmount.set('');
-    this.transactionDescription.set('');
+    this.transactionFormData.set({
+      date: this.dateUtil.getCurrentPersianDate(),
+      type: 'debit',
+      amount: '',
+      description: ''
+    });
   }
 
   onConfirm(confirmed: boolean): void {
@@ -168,9 +187,11 @@ export class TransactionViewComponent implements OnInit {
   openEditPersonModal(): void {
     const person = this.currentPerson();
     if (person) {
-      this.editPersonName.set(person.name);
-      this.editPersonPhone.set(person.phone || '');
-      this.editPersonAddress.set(person.address || '');
+      this.editPersonData.set({
+        name: person.name,
+        phone: person.phone || '',
+        address: person.address || ''
+      });
       this.showEditPersonModal.set(true);
     }
   }
@@ -179,18 +200,16 @@ export class TransactionViewComponent implements OnInit {
     this.showEditPersonModal.set(false);
   }
 
-  saveEditedPerson(): void {
-    const name = this.editPersonName();
-    
-    if (!name.trim()) {
+  saveEditedPerson(formData: PersonFormData): void {
+    if (!formData.name.trim()) {
       this.alertService.showError('لطفاً نام شخص را وارد کنید.');
       return;
     }
 
     const result = this.personService.updatePerson(this.personId(), {
-      name: name.trim(),
-      phone: this.editPersonPhone().trim(),
-      address: this.editPersonAddress().trim()
+      name: formData.name.trim(),
+      phone: formData.phone.trim(),
+      address: formData.address.trim()
     });
 
     if (result) {
@@ -213,17 +232,7 @@ export class TransactionViewComponent implements OnInit {
     this.alertService.showSuccess('متن صورت‌حساب کپی شد.');
   }
 
-  formatNumber(num: number): string {
-    return this.dateUtil.formatNumber(num);
-  }
-
   goBack(): void {
     this.router.navigate(['/people']);
-  }
-
-  getTransactionTypeClass(): string {
-    return this.transactionType() === 'debit' 
-      ? 'border-red-500 bg-red-50 text-red-700'
-      : 'border-green-500 bg-green-50 text-green-700';
   }
 }

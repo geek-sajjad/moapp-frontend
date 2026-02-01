@@ -43,7 +43,7 @@ export type IconName =
     :host {
       display: inline-flex;
       align-items: center;
-      justify-center;
+      justify-content: center;
     }
     ::ng-deep svg {
       width: 100%;

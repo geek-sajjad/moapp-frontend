@@ -1,0 +1,93 @@
+<div class="bg-white rounded-xl shadow-xl border border-gray-300 overflow-hidden animate-slide-up duration-300">
+  <div class="bg-gradient-to-r from-blue-100 to-gray-100 px-5 py-4 border-b border-gray-300">
+    <h2 class="text-lg font-extrabold text-gray-900 flex items-center gap-2.5">
+      <app-icon name="dollar-sign" [size]="20" class="text-blue-600" />
+      {{ isEditing() ? 'ویرایش تراکنش' : 'ثبت تراکنش جدید' }}
+    </h2>
+  </div>
+  
+  <div class="p-5 space-y-5">
+    <div class="grid grid-cols-1 gap-5">
+      <div class="space-y-2.5">
+        <label class="block text-sm font-bold text-gray-900">تاریخ</label>
+        <div class="relative">
+          <div class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
+            <app-icon name="calendar" [size]="18" />
+          </div>
+          <input
+            type="text"
+            [value]="formDate()"
+            (input)="formDate.set($any($event.target).value)"
+            placeholder="YYYY/MM/DD"
+            class="w-full min-h-[48px] pr-12 pl-4 py-3 border-2 border-gray-300 bg-white rounded-xl text-base font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:border-blue-500 hover:border-blue-400 placeholder:text-gray-400 placeholder:font-normal touch-manipulation"
+          />
+        </div>
+      </div>
+
+      <div class="space-y-2.5">
+        <label class="block text-sm font-bold text-gray-900">نوع تراکنش</label>
+        <select
+          [value]="formType()"
+          (change)="formType.set($any($event.target).value)"
+          [class]="'w-full min-h-[48px] px-4 py-3 border-2 rounded-xl text-base transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 font-bold touch-manipulation ' + getTransactionTypeClass()"
+        >
+          <option value="debit">بدهکار (شما بدهکار هستید)</option>
+          <option value="credit">بستانکار (شما بستانکار هستید)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="space-y-2.5">
+      <label class="block text-sm font-bold text-gray-900">مبلغ (تومان)</label>
+      <div class="relative">
+        <div class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
+          <app-icon name="dollar-sign" [size]="18" />
+        </div>
+        <input
+          type="number"
+          [value]="formAmount()"
+          (input)="formAmount.set($any($event.target).value)"
+          placeholder="مبلغ را وارد کنید"
+          class="w-full min-h-[48px] pr-12 pl-4 py-3 border-2 border-gray-300 bg-white rounded-xl text-base font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:border-blue-500 hover:border-blue-400 placeholder:text-gray-400 placeholder:font-normal touch-manipulation"
+        />
+      </div>
+    </div>
+
+    <div class="space-y-2.5">
+      <label class="block text-sm font-bold text-gray-900">توضیحات</label>
+      <textarea
+        [value]="formDescription()"
+        (input)="formDescription.set($any($event.target).value)"
+        rows="4"
+        placeholder="توضیحات تراکنش را وارد کنید"
+        class="w-full px-4 py-3 border-2 border-gray-300 bg-white rounded-xl text-base font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:border-blue-500 hover:border-blue-400 placeholder:text-gray-400 placeholder:font-normal resize-none touch-manipulation"
+      ></textarea>
+    </div>
+
+    <div class="flex gap-3 pt-1">
+      <app-button 
+        [fullWidth]="true"
+        [size]="'lg'"
+        (clicked)="handleSave()"
+      >
+        @if (isEditing()) {
+          <app-icon name="save" [size]="18" />
+        } @else {
+          <app-icon name="plus" [size]="18" />
+        }
+        {{ isEditing() ? 'ذخیره' : 'ثبت' }}
+      </app-button>
+
+      @if (isEditing()) {
+        <app-button 
+          [variant]="'outline'"
+          [size]="'lg'"
+          (clicked)="handleCancel()"
+        >
+          <app-icon name="x" [size]="18" />
+          لغو
+        </app-button>
+      }
+    </div>
+  </div>
+</div>

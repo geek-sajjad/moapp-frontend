@@ -1,0 +1,21 @@
+import { Component, input, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Transaction } from '../../../models/transaction.model';
+import { IconComponent } from '../../ui/icon/icon.component';
+import { DateUtilService } from '../../../services/date-util.service';
+
+@Component({
+  selector: 'app-transaction-item',
+  imports: [CommonModule, IconComponent],
+  templateUrl: './transaction-item.component.html',
+  styles: []
+})
+export class TransactionItemComponent {
+  private dateUtil = inject(DateUtilService);
+
+  transaction = input.required<Transaction>();
+
+  formatNumber(num: number): string {
+    return this.dateUtil.formatNumber(num);
+  }
+}

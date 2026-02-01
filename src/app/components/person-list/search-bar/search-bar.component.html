@@ -1,0 +1,12 @@
+<div class="relative">
+  <div class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
+    <app-icon name="search" [size]="20" />
+  </div>
+  <input
+    type="text"
+    [value]="value()"
+    (input)="handleChange($event)"
+    [placeholder]="placeholder()"
+    class="w-full min-h-[48px] pr-12 pl-4 py-3 border-2 border-gray-300 bg-white rounded-xl text-base font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:border-blue-500 hover:border-blue-400 placeholder:text-gray-400 placeholder:font-normal shadow-sm touch-manipulation"
+  />
+</div>

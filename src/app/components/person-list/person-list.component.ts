@@ -1,27 +1,32 @@
 import { Component, signal, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
 import { PersonService } from '../../services/person.service';
 import { TransactionService } from '../../services/transaction.service';
 import { AuthService } from '../../services/auth.service';
 import { AlertService } from '../../services/alert.service';
-import { ExportService } from '../../services/export.service';
 import { Person, CreatePersonDto } from '../../models/person.model';
 import { ButtonComponent } from '../ui/button/button.component';
 import { ModalComponent } from '../ui/modal/modal.component';
 import { ConfirmDialogComponent } from '../ui/confirm-dialog/confirm-dialog.component';
 import { IconComponent } from '../ui/icon/icon.component';
+import { AppHeaderComponent } from './app-header/app-header.component';
+import { SearchBarComponent } from './search-bar/search-bar.component';
+import { PersonCardComponent } from './person-card/person-card.component';
+import { EditPersonFormComponent, PersonFormData } from '../transaction-view/edit-person-form/edit-person-form.component';
 
 @Component({
   selector: 'app-person-list',
   imports: [
     CommonModule, 
-    FormsModule, 
     ButtonComponent, 
     ModalComponent,
     ConfirmDialogComponent,
-    IconComponent
+    IconComponent,
+    AppHeaderComponent,
+    SearchBarComponent,
+    PersonCardComponent,
+    EditPersonFormComponent
   ],
   templateUrl: './person-list.component.html',
   styles: []
@@ -32,7 +37,6 @@ export class PersonListComponent implements OnInit {
   private transactionService = inject(TransactionService);
   private authService = inject(AuthService);
   private alertService = inject(AlertService);
-  private exportService = inject(ExportService);
 
   searchTerm = signal<string>('');
   people = computed(() => {
@@ -45,16 +49,20 @@ export class PersonListComponent implements OnInit {
 
   // Add Person Modal
   showAddModal = signal<boolean>(false);
-  newPersonName = signal<string>('');
-  newPersonPhone = signal<string>('');
-  newPersonAddress = signal<string>('');
+  addPersonData = signal<PersonFormData>({
+    name: '',
+    phone: '',
+    address: ''
+  });
 
   // Edit Person Modal
   showEditModal = signal<boolean>(false);
   editingPersonId = signal<string>('');
-  editPersonName = signal<string>('');
-  editPersonPhone = signal<string>('');
-  editPersonAddress = signal<string>('');
+  editPersonData = signal<PersonFormData>({
+    name: '',
+    phone: '',
+    address: ''
+  });
 
   // Confirm Dialog
   showConfirmDialog = signal<boolean>(false);
@@ -72,9 +80,11 @@ export class PersonListComponent implements OnInit {
   }
 
   openAddModal(): void {
-    this.newPersonName.set('');
-    this.newPersonPhone.set('');
-    this.newPersonAddress.set('');
+    this.addPersonData.set({
+      name: '',
+      phone: '',
+      address: ''
+    });
     this.showAddModal.set(true);
   }
 
@@ -82,18 +92,16 @@ export class PersonListComponent implements OnInit {
     this.showAddModal.set(false);
   }
 
-  addPerson(): void {
-    const name = this.newPersonName();
-    
-    if (!name.trim()) {
+  addPerson(formData: PersonFormData): void {
+    if (!formData.name.trim()) {
       this.alertService.showError('لطفاً نام شخص را وارد کنید.');
       return;
     }
 
     const dto: CreatePersonDto = {
-      name: name.trim(),
-      phone: this.newPersonPhone().trim(),
-      address: this.newPersonAddress().trim()
+      name: formData.name.trim(),
+      phone: formData.phone.trim(),
+      address: formData.address.trim()
     };
 
     this.personService.addPerson(dto);
@@ -103,9 +111,11 @@ export class PersonListComponent implements OnInit {
 
   openEditModal(person: Person): void {
     this.editingPersonId.set(person.id);
-    this.editPersonName.set(person.name);
-    this.editPersonPhone.set(person.phone || '');
-    this.editPersonAddress.set(person.address || '');
+    this.editPersonData.set({
+      name: person.name,
+      phone: person.phone || '',
+      address: person.address || ''
+    });
     this.showEditModal.set(true);
   }
 
@@ -113,18 +123,16 @@ export class PersonListComponent implements OnInit {
     this.showEditModal.set(false);
   }
 
-  saveEditedPerson(): void {
-    const name = this.editPersonName();
-    
-    if (!name.trim()) {
+  saveEditedPerson(formData: PersonFormData): void {
+    if (!formData.name.trim()) {
       this.alertService.showError('لطفاً نام شخص را وارد کنید.');
       return;
     }
 
     const dto: Partial<CreatePersonDto> = {
-      name: name.trim(),
-      phone: this.editPersonPhone().trim(),
-      address: this.editPersonAddress().trim()
+      name: formData.name.trim(),
+      phone: formData.phone.trim(),
+      address: formData.address.trim()
     };
 
     const result = this.personService.updatePerson(this.editingPersonId(), dto);
