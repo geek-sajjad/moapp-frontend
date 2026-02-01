@@ -19,9 +19,9 @@ import { CommonModule } from '@angular/common';
       .skeleton-shimmer {
         background: linear-gradient(
           90deg,
-          hsl(var(--muted)) 0%,
-          hsl(var(--muted) / 0.5) 50%,
-          hsl(var(--muted)) 100%
+          #f3f4f6 0%,
+          #e5e7eb 50%,
+          #f3f4f6 100%
         );
         background-size: 200% 100%;
         animation: shimmer 1.5s ease-in-out infinite;
@@ -36,7 +36,7 @@ export class SkeletonComponent {
   className = input<string>('');
 
   getSkeletonClasses(): string {
-    const baseClasses = 'skeleton-shimmer bg-muted';
+    const baseClasses = 'skeleton-shimmer bg-gray-100';
 
     const variantClasses = {
       default: 'rounded-lg',

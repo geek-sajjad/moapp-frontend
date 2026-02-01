@@ -2,7 +2,7 @@
   @if (label()) {
     <label
       [for]="id()"
-      class="text-sm font-medium leading-none text-foreground peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+      class="text-sm font-medium leading-none text-gray-900 peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
     >
       {{ label() }}
     </label>
@@ -18,7 +18,7 @@
   />
   @if (error()) {
     <p
-      class="text-sm font-medium text-destructive animate-in fade-in slide-in-from-top duration-200"
+      class="text-sm font-medium text-red-600 animate-fade-in-down"
     >
       {{ error() }}
     </p>

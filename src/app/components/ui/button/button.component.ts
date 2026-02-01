@@ -26,18 +26,18 @@ export class ButtonComponent {
 
   getButtonClasses(): string {
     const baseClasses =
-      'inline-flex gap-2 items-center justify-center whitespace-nowrap rounded-lg text-sm font-semibold ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-95';
+      'inline-flex gap-2 items-center justify-center whitespace-nowrap rounded-lg text-sm font-semibold ring-offset-white transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-95';
 
     const variantClasses = {
-      default: 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm hover:shadow-md',
+      default: 'bg-blue-600 text-white hover:bg-blue-700 shadow-sm hover:shadow-md',
       destructive:
-        'bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm hover:shadow-md',
+        'bg-red-600 text-white hover:bg-red-700 shadow-sm hover:shadow-md',
       outline:
-        'border-2 border-input bg-background hover:bg-accent hover:text-accent-foreground shadow-sm hover:shadow',
+        'border-2 border-gray-300 bg-white hover:bg-gray-100 hover:text-gray-900 shadow-sm hover:shadow',
       secondary:
-        'bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm hover:shadow',
-      ghost: 'hover:bg-accent hover:text-accent-foreground',
-      link: 'text-primary underline-offset-4 hover:underline',
+        'bg-gray-100 text-gray-900 hover:bg-gray-200 shadow-sm hover:shadow',
+      ghost: 'hover:bg-gray-100 hover:text-gray-900',
+      link: 'text-blue-600 underline-offset-4 hover:underline',
     };
 
     const sizeClasses = {

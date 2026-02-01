@@ -1,7 +1,7 @@
 <div class="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/10 p-3">
   <div class="w-full space-y-4">
     <!-- Back Button -->
-    <div class="animate-in fade-in slide-in-from-top duration-300">
+    <div class="animate-fade-in-down duration-300">
       <app-button 
         [variant]="'outline'"
         [size]="'sm'"
@@ -17,20 +17,20 @@
 
     <!-- Person Info Card -->
     @if (currentPerson(); as person) {
-      <div class="bg-card rounded-xl shadow-xl border border-border overflow-hidden animate-in fade-in slide-in-from-top duration-300">
-        <div class="bg-gradient-to-r from-primary/10 to-secondary/10 px-4 py-3 border-b border-border">
+      <div class="bg-white rounded-xl shadow-xl border border-gray-300 overflow-hidden animate-fade-in-down duration-300">
+        <div class="bg-gradient-to-r from-blue-100 to-gray-100 px-4 py-3 border-b border-gray-300">
           <div class="flex flex-col gap-3">
             <div class="flex items-center gap-3">
-              <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary">
+              <div class="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-600">
                   <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
                   <circle cx="12" cy="7" r="4"></circle>
                 </svg>
               </div>
               <div class="flex-grow min-w-0">
-                <h1 class="text-xl font-bold text-foreground truncate">{{ person.name }}</h1>
+                <h1 class="text-xl font-bold text-gray-900 truncate">{{ person.name }}</h1>
                 @if (person.phone || person.address) {
-                  <div class="text-xs text-muted-foreground mt-1 space-y-0.5">
+                  <div class="text-xs text-gray-500 mt-1 space-y-0.5">
                     @if (person.phone) {
                       <div class="flex items-center gap-1.5">
                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -67,11 +67,11 @@
         </div>
 
         <!-- Balance Display -->
-        <div class="px-4 py-4 bg-muted/20">
+        <div class="px-4 py-4 bg-gray-50">
           <div class="flex items-center justify-center gap-2">
-            <span class="text-muted-foreground font-medium text-sm">مانده حساب:</span>
+            <span class="text-gray-500 font-medium text-sm">مانده حساب:</span>
             <div 
-              [class]="'text-2xl font-bold ' + (balance() < 0 ? 'text-red-600' : balance() > 0 ? 'text-green-600' : 'text-muted-foreground')"
+              [class]="'text-2xl font-bold ' + (balance() < 0 ? 'text-red-600' : balance() > 0 ? 'text-green-600' : 'text-gray-500')"
             >
               {{ formatNumber(balance()) }} تومان
             </div>
@@ -81,10 +81,10 @@
     }
 
     <!-- Transaction Form Card -->
-    <div class="bg-card rounded-xl shadow-xl border border-border overflow-hidden animate-in fade-in slide-in-from-bottom duration-300">
-      <div class="bg-gradient-to-r from-primary/10 to-secondary/10 px-4 py-3 border-b border-border">
-        <h2 class="text-base font-bold text-foreground flex items-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary">
+    <div class="bg-white rounded-xl shadow-xl border border-gray-300 overflow-hidden animate-slide-up duration-300">
+      <div class="bg-gradient-to-r from-blue-100 to-gray-100 px-4 py-3 border-b border-gray-300">
+        <h2 class="text-base font-bold text-gray-900 flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-600">
             <line x1="12" y1="1" x2="12" y2="23"></line>
             <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
           </svg>
@@ -95,9 +95,9 @@
       <div class="p-4 space-y-4">
         <div class="grid grid-cols-1 gap-4">
           <div class="space-y-1.5">
-            <label class="block text-xs font-semibold text-foreground">تاریخ</label>
+            <label class="block text-xs font-semibold text-gray-900">تاریخ</label>
             <div class="relative">
-              <div class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+              <div class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                   <line x1="16" y1="2" x2="16" y2="6"></line>
@@ -110,17 +110,17 @@
                 [value]="transactionDate()"
                 (input)="transactionDate.set($any($event.target).value)"
                 placeholder="YYYY/MM/DD"
-                class="w-full h-11 pr-10 pl-3 py-2 border-2 border-input bg-background rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:border-ring/50 placeholder:text-muted-foreground"
+                class="w-full h-11 pr-10 pl-3 py-2 border-2 border-gray-300 bg-white rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 hover:border-blue-400 placeholder:text-gray-500"
               />
             </div>
           </div>
 
           <div class="space-y-1.5">
-            <label class="block text-xs font-semibold text-foreground">نوع تراکنش</label>
+            <label class="block text-xs font-semibold text-gray-900">نوع تراکنش</label>
             <select
               [value]="transactionType()"
               (change)="transactionType.set($any($event.target).value)"
-              [class]="'w-full h-11 px-3 py-2 border-2 rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 font-bold ' + getTransactionTypeClass()"
+              [class]="'w-full h-11 px-3 py-2 border-2 rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 font-bold ' + getTransactionTypeClass()"
             >
               <option value="debit">بدهکار (شما بدهکار هستید)</option>
               <option value="credit">بستانکار (شما بستانکار هستید)</option>
@@ -129,9 +129,9 @@
         </div>
 
         <div class="space-y-1.5">
-          <label class="block text-xs font-semibold text-foreground">مبلغ (تومان)</label>
+          <label class="block text-xs font-semibold text-gray-900">مبلغ (تومان)</label>
           <div class="relative">
-            <div class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+            <div class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="12" y1="1" x2="12" y2="23"></line>
                 <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
@@ -142,19 +142,19 @@
               [value]="transactionAmount()"
               (input)="transactionAmount.set($any($event.target).value)"
               placeholder="مبلغ را وارد کنید"
-              class="w-full h-11 pr-10 pl-3 py-2 border-2 border-input bg-background rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:border-ring/50 placeholder:text-muted-foreground"
+              class="w-full h-11 pr-10 pl-3 py-2 border-2 border-gray-300 bg-white rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 hover:border-blue-400 placeholder:text-gray-500"
             />
           </div>
         </div>
 
         <div class="space-y-1.5">
-          <label class="block text-xs font-semibold text-foreground">توضیحات</label>
+          <label class="block text-xs font-semibold text-gray-900">توضیحات</label>
           <textarea
             [value]="transactionDescription()"
             (input)="transactionDescription.set($any($event.target).value)"
             rows="3"
             placeholder="توضیحات تراکنش را وارد کنید"
-            class="w-full px-3 py-2 border-2 border-input bg-background rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:border-ring/50 placeholder:text-muted-foreground resize-none"
+            class="w-full px-3 py-2 border-2 border-gray-300 bg-white rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 hover:border-blue-400 placeholder:text-gray-500 resize-none"
           ></textarea>
         </div>
 
@@ -195,10 +195,10 @@
     </div>
 
     <!-- Transactions List -->
-    <div class="bg-card rounded-xl shadow-xl border border-border overflow-hidden animate-in fade-in slide-in-from-bottom duration-500">
-      <div class="bg-gradient-to-r from-primary/10 to-secondary/10 px-4 py-3 border-b border-border">
-        <h2 class="text-base font-bold text-foreground flex items-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary">
+    <div class="bg-white rounded-xl shadow-xl border border-gray-300 overflow-hidden animate-slide-up duration-500">
+      <div class="bg-gradient-to-r from-blue-100 to-gray-100 px-4 py-3 border-b border-gray-300">
+        <h2 class="text-base font-bold text-gray-900 flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-600">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
             <polyline points="14 2 14 8 20 8"></polyline>
             <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -207,7 +207,7 @@
           </svg>
           تراکنش‌ها
           @if (transactions().length > 0) {
-            <span class="text-xs font-normal text-muted-foreground">({{ transactions().length }})</span>
+            <span class="text-xs font-normal text-gray-500">({{ transactions().length }})</span>
           }
         </h2>
       </div>
@@ -215,19 +215,19 @@
       <div class="divide-y divide-border">
         @if (transactions().length === 0) {
           <div class="p-8 text-center">
-            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted mb-3">
-              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-muted-foreground">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-3">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-500">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                 <polyline points="14 2 14 8 20 8"></polyline>
               </svg>
             </div>
-            <p class="text-muted-foreground text-base">هیچ تراکنشی ثبت نشده است.</p>
-            <p class="text-muted-foreground text-xs mt-1.5">تراکنش اول را ثبت کنید.</p>
+            <p class="text-gray-500 text-base">هیچ تراکنشی ثبت نشده است.</p>
+            <p class="text-gray-500 text-xs mt-1.5">تراکنش اول را ثبت کنید.</p>
           </div>
         }
 
         @for (transaction of transactions(); track transaction.id) {
-          <div class="flex flex-col p-4 hover:bg-accent/50 transition-colors group gap-3">
+          <div class="flex flex-col p-4 hover:bg-gray-50 transition-colors group gap-3">
             <div class="flex items-start gap-3">
               <div [class]="'w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ' + (transaction.type === 'debit' ? 'bg-red-50' : 'bg-green-50')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" [class]="transaction.type === 'debit' ? 'text-red-600' : 'text-green-600'">
@@ -240,7 +240,7 @@
                 </svg>
               </div>
               <div class="flex-grow min-w-0">
-                <div class="text-xs text-muted-foreground flex items-center gap-1.5">
+                <div class="text-xs text-gray-500 flex items-center gap-1.5">
                   <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                     <line x1="16" y1="2" x2="16" y2="6"></line>
@@ -249,7 +249,7 @@
                   </svg>
                   {{ transaction.date }}
                 </div>
-                <div class="text-foreground font-medium text-sm mt-0.5 break-words">{{ transaction.description }}</div>
+                <div class="text-gray-900 font-medium text-sm mt-0.5 break-words">{{ transaction.description }}</div>
               </div>
             </div>
 
@@ -291,7 +291,7 @@
 
     <!-- Share Button -->
     @if (transactions().length > 0) {
-      <div class="animate-in fade-in slide-in-from-bottom duration-500">
+      <div class="animate-slide-up duration-500">
         <app-button
           [variant]="'secondary'"
           [fullWidth]="true"
@@ -320,35 +320,35 @@
 >
   <div class="space-y-4">
     <div class="space-y-1.5">
-      <label class="block text-xs font-semibold text-foreground">نام</label>
+      <label class="block text-xs font-semibold text-gray-900">نام</label>
       <input
         type="text"
         [value]="editPersonName()"
         (input)="editPersonName.set($any($event.target).value)"
         placeholder="نام شخص را وارد کنید"
-        class="w-full h-11 px-3 py-2 border-2 border-input bg-background rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:border-ring/50 placeholder:text-muted-foreground"
+        class="w-full h-11 px-3 py-2 border-2 border-gray-300 bg-white rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 hover:border-blue-400 placeholder:text-gray-500"
       />
     </div>
     
     <div class="space-y-1.5">
-      <label class="block text-xs font-semibold text-foreground">شماره تلفن</label>
+      <label class="block text-xs font-semibold text-gray-900">شماره تلفن</label>
       <input
         type="text"
         [value]="editPersonPhone()"
         (input)="editPersonPhone.set($any($event.target).value)"
         placeholder="شماره تلفن را وارد کنید"
-        class="w-full h-11 px-3 py-2 border-2 border-input bg-background rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:border-ring/50 placeholder:text-muted-foreground"
+        class="w-full h-11 px-3 py-2 border-2 border-gray-300 bg-white rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 hover:border-blue-400 placeholder:text-gray-500"
       />
     </div>
     
     <div class="space-y-1.5">
-      <label class="block text-xs font-semibold text-foreground">آدرس</label>
+      <label class="block text-xs font-semibold text-gray-900">آدرس</label>
       <textarea
         [value]="editPersonAddress()"
         (input)="editPersonAddress.set($any($event.target).value)"
         rows="3"
         placeholder="آدرس را وارد کنید"
-        class="w-full px-3 py-2 border-2 border-input bg-background rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:border-ring/50 placeholder:text-muted-foreground resize-none"
+        class="w-full px-3 py-2 border-2 border-gray-300 bg-white rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 hover:border-blue-400 placeholder:text-gray-500 resize-none"
       ></textarea>
     </div>
     

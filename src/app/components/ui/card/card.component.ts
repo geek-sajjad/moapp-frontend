@@ -18,9 +18,9 @@ export class CardComponent {
     const baseClasses = 'rounded-2xl overflow-hidden transition-all duration-300';
 
     const variantClasses = {
-      default: 'bg-card border border-border shadow-md hover:shadow-lg',
-      elevated: 'bg-card shadow-xl border border-border hover:shadow-2xl',
-      outline: 'bg-card border-2 border-border hover:border-primary/30',
+      default: 'bg-white border border-gray-300 shadow-md hover:shadow-lg',
+      elevated: 'bg-white shadow-xl border border-gray-300 hover:shadow-2xl',
+      outline: 'bg-white border-2 border-gray-300 hover:border-blue-300',
     };
 
     return `${baseClasses} ${variantClasses[this.variant()]} ${this.className()}`;

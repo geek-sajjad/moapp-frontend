@@ -1,6 +1,6 @@
 @if (alertService.alert(); as alert) {
   <div
-    class="fixed top-3 left-1/2 transform -translate-x-1/2 z-[100] animate-in fade-in slide-in-from-top duration-300 w-[calc(100%-1.5rem)] max-w-md"
+    class="fixed top-3 left-1/2 transform -translate-x-1/2 z-[100] animate-fade-in-down duration-300 w-[calc(100%-1.5rem)] max-w-md"
   >
     <div
       [class]="getAlertClasses(alert.type || 'info')"

@@ -1,6 +1,6 @@
 # دفتر معین شخصی (Personal Ledger)
 
-A Persian/Farsi personal accounting ledger application built with Angular 21, TailwindCSS, and shadcn-ui design patterns.
+A Persian/Farsi personal accounting ledger application built with Angular 21 and TailwindCSS.
 
 ## Features
 
@@ -101,14 +101,17 @@ The following features from the original HTML version were removed as requested:
 
 ## UI Components
 
-The application uses custom UI components following shadcn-ui patterns:
-- Button
-- Input
-- Textarea
-- Select
-- Modal
-- Confirm Dialog
-- Alert/Toast
+The application uses custom reusable UI components built with pure TailwindCSS:
+- Button - Multiple variants (default, destructive, outline, secondary, ghost, link)
+- Input - Text input with label and error states
+- Textarea - Multi-line text input
+- Select - Dropdown selection
+- Modal - Overlay dialog for forms
+- Confirm Dialog - Confirmation prompts for destructive actions
+- Alert/Toast - Toast notifications for feedback
+- Card - Content containers with variants
+- Badge - Status indicators
+- Skeleton - Loading placeholders
 
 ## Development
 
@@ -139,6 +142,7 @@ This project is provided as-is for personal or educational use.
 This Angular application was converted from a raw HTML/CSS/jQuery project to use modern Angular 21 features:
 - Standalone components
 - Signals for reactive state
-- TailwindCSS for styling
+- Pure TailwindCSS for styling (no custom CSS variables)
 - TypeScript for type safety
 - Modular architecture
+- Custom animation utilities
