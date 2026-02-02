@@ -33,16 +33,17 @@
     <div class="space-y-2.5">
       <label class="block text-sm font-bold text-gray-900">مبلغ (تومان)</label>
       <div class="relative">
-        <div class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
-          <app-icon name="dollar-sign" [size]="18" />
-        </div>
         <input
-          type="number"
-          [value]="formAmount()"
-          (input)="formAmount.set($any($event.target).value)"
+          type="text"
+          [value]="getFormattedAmount()"
+          (input)="handleAmountInput($event)"
           placeholder="مبلغ را وارد کنید"
-          class="w-full min-h-[48px] pr-12 pl-4 py-3 border-2 border-gray-300 bg-white rounded-xl text-base font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:border-blue-500 hover:border-blue-400 placeholder:text-gray-400 placeholder:font-normal touch-manipulation"
+          dir="ltr"
+          class="w-full min-h-[48px] pr-4 pl-20 py-3 border-2 border-gray-300 bg-white rounded-xl text-base font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:border-blue-500 hover:border-blue-400 placeholder:text-gray-400 placeholder:font-normal touch-manipulation [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         />
+        <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium text-sm pointer-events-none">
+          تومان
+        </div>
       </div>
     </div>
 

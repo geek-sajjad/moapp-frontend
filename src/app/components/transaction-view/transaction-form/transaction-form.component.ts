@@ -59,4 +59,20 @@ export class TransactionFormComponent {
       ? 'border-red-500 bg-red-50 text-red-700'
       : 'border-green-500 bg-green-50 text-green-700';
   }
+
+  getFormattedAmount(): string {
+    const amount = this.formAmount();
+    if (!amount) return '';
+    // Format number with thousand separators
+    return Number(amount).toLocaleString('en-US');
+  }
+
+  handleAmountInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const value = input.value;
+    // Remove all non-digit characters
+    const numericValue = value.replace(/\D/g, '');
+    // Update the signal with the raw numeric value
+    this.formAmount.set(numericValue);
+  }
 }
