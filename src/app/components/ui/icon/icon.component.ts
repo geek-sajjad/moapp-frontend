@@ -25,7 +25,9 @@ export type IconName =
   | 'lock'
   | 'alert-circle'
   | 'info'
-  | 'user-plus';
+  | 'user-plus'
+  | 'chevron-left'
+  | 'chevron-right';
 
 @Component({
   selector: 'app-icon',

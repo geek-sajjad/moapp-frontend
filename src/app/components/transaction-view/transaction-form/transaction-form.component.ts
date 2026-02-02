@@ -2,6 +2,7 @@ import { Component, input, output, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonComponent } from '../../ui/button/button.component';
 import { IconComponent } from '../../ui/icon/icon.component';
+import { PersianDatepickerComponent } from '../../ui/persian-datepicker/persian-datepicker.component';
 
 export interface TransactionFormData {
   date: string;
@@ -12,7 +13,7 @@ export interface TransactionFormData {
 
 @Component({
   selector: 'app-transaction-form',
-  imports: [CommonModule, ButtonComponent, IconComponent],
+  imports: [CommonModule, ButtonComponent, IconComponent, PersianDatepickerComponent],
   templateUrl: './transaction-form.component.html',
   styles: []
 })

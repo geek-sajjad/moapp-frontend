@@ -1,0 +1,86 @@
+<div class="relative">
+  <div class="relative">
+    <div class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 z-10 pointer-events-none">
+      <app-icon name="calendar" [size]="18" />
+    </div>
+    <input
+      type="text"
+      readonly
+      [value]="formatDisplayValue()"
+      (click)="toggleCalendar()"
+      [placeholder]="placeholder()"
+      class="w-full min-h-[48px] pr-12 pl-4 py-3 border-2 border-gray-300 bg-white rounded-xl text-base font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:border-blue-500 hover:border-blue-400 placeholder:text-gray-400 placeholder:font-normal touch-manipulation cursor-pointer"
+    />
+  </div>
+  
+  @if (isOpen()) {
+    <div class="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border-2 border-gray-200 z-50 overflow-hidden">
+      <!-- Header -->
+      <div class="bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-3 flex items-center justify-between">
+          <button type="button" (click)="previousMonth()" class="p-2 hover:bg-white/20 rounded-lg transition-colors flex">
+            <app-icon name="chevron-right" [size]="20" class="text-white" />
+            <span class="text-white">ماه قبل</span>
+          </button>
+
+        <div class="text-white font-bold text-base">
+          {{ monthName() }}
+        </div>
+        
+        <button
+          type="button"
+          (click)="nextMonth()"
+          class="p-2 hover:bg-white/20 rounded-lg transition-colors flex"
+        >
+        <span class="text-white">ماه بعد</span>
+          <app-icon name="chevron-left" [size]="20" class="text-white" />
+
+        </button>
+      </div>
+      
+      <!-- Calendar -->
+      <div class="p-4">
+        <!-- Week days -->
+        <div class="grid grid-cols-7 gap-1 mb-2">
+          @for (day of weekDays; track day) {
+            <div class="text-center text-sm font-bold text-gray-600 py-2">
+              {{ day }}
+            </div>
+          }
+        </div>
+        
+        <!-- Days -->
+        <div class="grid grid-cols-7 gap-1">
+          @for (day of calendarDays(); track $index) {
+            @if (day === null) {
+              <div class="aspect-square"></div>
+            } @else {
+              <button
+                type="button"
+                (click)="selectDate(day)"
+                [class]="'aspect-square flex items-center justify-center rounded-lg text-sm font-medium transition-all ' +
+                  (isSelectedDate(day) 
+                    ? 'bg-blue-600 text-white shadow-md hover:bg-blue-700' 
+                    : isToday(day)
+                    ? 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                    : 'hover:bg-gray-100 text-gray-700')"
+              >
+                {{ getPersianDayNumber(day) }}
+              </button>
+            }
+          }
+        </div>
+      </div>
+      
+      <!-- Today button -->
+      <div class="border-t border-gray-200 px-4 py-3">
+        <button
+          type="button"
+          (click)="selectToday()"
+          class="w-full py-2 px-4 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-colors"
+        >
+          امروز
+        </button>
+      </div>
+    </div>
+  }
+</div>
