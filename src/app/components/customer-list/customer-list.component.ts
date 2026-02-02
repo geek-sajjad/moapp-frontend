@@ -12,11 +12,11 @@ import { ConfirmDialogComponent } from '../ui/confirm-dialog/confirm-dialog.comp
 import { IconComponent } from '../ui/icon/icon.component';
 import { AppHeaderComponent } from './app-header/app-header.component';
 import { SearchBarComponent } from './search-bar/search-bar.component';
-import { PersonCardComponent } from './person-card/person-card.component';
+import { CustomerCardComponent } from './customer-card/customer-card.component';
 import { EditPersonFormComponent, PersonFormData } from '../transaction-view/edit-person-form/edit-person-form.component';
 
 @Component({
-  selector: 'app-person-list',
+  selector: 'app-customer-list',
   imports: [
     CommonModule, 
     ButtonComponent, 
@@ -25,13 +25,13 @@ import { EditPersonFormComponent, PersonFormData } from '../transaction-view/edi
     IconComponent,
     AppHeaderComponent,
     SearchBarComponent,
-    PersonCardComponent,
+    CustomerCardComponent,
     EditPersonFormComponent
   ],
-  templateUrl: './person-list.component.html',
+  templateUrl: './customer-list.component.html',
   styles: []
 })
-export class PersonListComponent implements OnInit {
+export class CustomerListComponent implements OnInit {
   private router = inject(Router);
   private personService = inject(PersonService);
   private transactionService = inject(TransactionService);
@@ -39,7 +39,7 @@ export class PersonListComponent implements OnInit {
   private alertService = inject(AlertService);
 
   searchTerm = signal<string>('');
-  people = computed(() => {
+  customers = computed(() => {
     const term = this.searchTerm();
     if (!term) {
       return this.personService.people();
@@ -47,18 +47,18 @@ export class PersonListComponent implements OnInit {
     return this.personService.searchPeople(term);
   });
 
-  // Add Person Modal
+  // Add Customer Modal
   showAddModal = signal<boolean>(false);
-  addPersonData = signal<PersonFormData>({
+  addCustomerData = signal<PersonFormData>({
     name: '',
     phone: '',
     address: ''
   });
 
-  // Edit Person Modal
+  // Edit Customer Modal
   showEditModal = signal<boolean>(false);
-  editingPersonId = signal<string>('');
-  editPersonData = signal<PersonFormData>({
+  editingCustomerId = signal<string>('');
+  editCustomerData = signal<PersonFormData>({
     name: '',
     phone: '',
     address: ''
@@ -80,7 +80,7 @@ export class PersonListComponent implements OnInit {
   }
 
   openAddModal(): void {
-    this.addPersonData.set({
+    this.addCustomerData.set({
       name: '',
       phone: '',
       address: ''
@@ -92,9 +92,9 @@ export class PersonListComponent implements OnInit {
     this.showAddModal.set(false);
   }
 
-  addPerson(formData: PersonFormData): void {
+  addCustomer(formData: PersonFormData): void {
     if (!formData.name.trim()) {
-      this.alertService.showError('لطفاً نام شخص را وارد کنید.');
+      this.alertService.showError('لطفاً نام مشتری را وارد کنید.');
       return;
     }
 
@@ -105,16 +105,16 @@ export class PersonListComponent implements OnInit {
     };
 
     this.personService.addPerson(dto);
-    this.alertService.showSuccess('شخص با موفقیت اضافه شد.');
+    this.alertService.showSuccess('مشتری با موفقیت اضافه شد.');
     this.closeAddModal();
   }
 
-  openEditModal(person: Person): void {
-    this.editingPersonId.set(person.id);
-    this.editPersonData.set({
-      name: person.name,
-      phone: person.phone || '',
-      address: person.address || ''
+  openEditModal(customer: Person): void {
+    this.editingCustomerId.set(customer.id);
+    this.editCustomerData.set({
+      name: customer.name,
+      phone: customer.phone || '',
+      address: customer.address || ''
     });
     this.showEditModal.set(true);
   }
@@ -123,9 +123,9 @@ export class PersonListComponent implements OnInit {
     this.showEditModal.set(false);
   }
 
-  saveEditedPerson(formData: PersonFormData): void {
+  saveEditedCustomer(formData: PersonFormData): void {
     if (!formData.name.trim()) {
-      this.alertService.showError('لطفاً نام شخص را وارد کنید.');
+      this.alertService.showError('لطفاً نام مشتری را وارد کنید.');
       return;
     }
 
@@ -135,30 +135,30 @@ export class PersonListComponent implements OnInit {
       address: formData.address.trim()
     };
 
-    const result = this.personService.updatePerson(this.editingPersonId(), dto);
+    const result = this.personService.updatePerson(this.editingCustomerId(), dto);
     
     if (result) {
-      this.alertService.showSuccess('مشخصات شخص با موفقیت به‌روزرسانی شد.');
+      this.alertService.showSuccess('مشخصات مشتری با موفقیت به‌روزرسانی شد.');
       this.closeEditModal();
     } else {
-      this.alertService.showError('خطا در به‌روزرسانی شخص.');
+      this.alertService.showError('خطا در به‌روزرسانی مشتری.');
     }
   }
 
-  // confirmDeletePerson(personId: string): void {
-  //   this.confirmMessage.set('آیا از حذف این شخص و تمام تراکنش‌های مرتبط با او مطمئن هستید؟');
-  //   this.confirmCallback.set(() => this.deletePerson(personId));
+  // confirmDeleteCustomer(customerId: string): void {
+  //   this.confirmMessage.set('آیا از حذف این مشتری و تمام تراکنش‌های مرتبط با او مطمئن هستید؟');
+  //   this.confirmCallback.set(() => this.deleteCustomer(customerId));
   //   this.showConfirmDialog.set(true);
   // }
 
-  deletePerson(personId: string): void {
-    this.transactionService.deleteTransactionsByPersonId(personId);
-    const success = this.personService.deletePerson(personId);
+  deleteCustomer(customerId: string): void {
+    this.transactionService.deleteTransactionsByPersonId(customerId);
+    const success = this.personService.deletePerson(customerId);
     
     if (success) {
-      this.alertService.showSuccess('شخص با موفقیت حذف شد.');
+      this.alertService.showSuccess('مشتری با موفقیت حذف شد.');
     } else {
-      this.alertService.showError('خطا در حذف شخص.');
+      this.alertService.showError('خطا در حذف مشتری.');
     }
   }
 
@@ -172,8 +172,8 @@ export class PersonListComponent implements OnInit {
     this.confirmCallback.set(null);
   }
 
-  viewTransactions(person: Person): void {
-    this.router.navigate(['/transactions', person.id]);
+  viewTransactions(customer: Person): void {
+    this.router.navigate(['/transactions', customer.id]);
   }
 
   // exportData(): void {

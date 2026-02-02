@@ -4,16 +4,16 @@ import { Person } from '../../../models/person.model';
 import { IconComponent } from '../../ui/icon/icon.component';
 
 @Component({
-  selector: 'app-person-card',
+  selector: 'app-customer-card',
   imports: [CommonModule, IconComponent],
-  templateUrl: './person-card.component.html',
+  templateUrl: './customer-card.component.html',
   styles: []
 })
-export class PersonCardComponent {
-  person = input.required<Person>();
+export class CustomerCardComponent {
+  customer = input.required<Person>();
   onClick = output<Person>();
 
   handleClick(): void {
-    this.onClick.emit(this.person());
+    this.onClick.emit(this.customer());
   }
 }

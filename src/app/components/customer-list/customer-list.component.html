@@ -21,9 +21,9 @@
     <div class="flex flex-col gap-3 mb-4">
       <h2 class="text-xl font-extrabold text-gray-900 flex items-center gap-2.5">
         <app-icon name="users" [size]="22" class="text-blue-600" />
-        لیست افراد
-        @if (people().length > 0) {
-          <span class="text-sm font-semibold text-gray-500">({{ people().length }} نفر)</span>
+        لیست مشتریان
+        @if (customers().length > 0) {
+          <span class="text-sm font-semibold text-gray-500">({{ customers().length }} مشتری)</span>
         }
       </h2>
       <div class="flex gap-3">
@@ -39,21 +39,21 @@
       </div>
     </div>
 
-    <!-- People List -->
+    <!-- Customers List -->
     <div class="space-y-2.5">
-      @if (people().length === 0) {
+      @if (customers().length === 0) {
         <div class="bg-white rounded-xl shadow-lg border border-gray-300 p-10 text-center animate-fade-in-scale duration-300">
           <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gray-100 mb-4">
             <app-icon name="users" [size]="36" class="text-gray-400" />
           </div>
-          <p class="text-gray-700 text-lg font-bold">هیچ شخصی یافت نشد</p>
-          <p class="text-gray-500 text-sm font-medium mt-2">برای شروع، یک شخص جدید اضافه کنید</p>
+          <p class="text-gray-700 text-lg font-bold">هیچ مشتری یافت نشد</p>
+          <p class="text-gray-500 text-sm font-medium mt-2">برای شروع، یک مشتری جدید اضافه کنید</p>
         </div>
       }
       
-      @for (person of people(); track person.id) {
-        <app-person-card 
-          [person]="person"
+      @for (customer of customers(); track customer.id) {
+        <app-customer-card 
+          [customer]="customer"
           (onClick)="viewTransactions($event)"
         />
       }
@@ -61,29 +61,29 @@
   </div>
 </div>
 
-<!-- Add Person Modal -->
+<!-- Add Customer Modal -->
 <app-modal 
   [isOpen]="showAddModal()" 
-  [title]="'افزودن شخص جدید'"
+  [title]="'افزودن مشتری جدید'"
   (closed)="closeAddModal()"
 >
   <app-edit-person-form
-    [initialData]="addPersonData()"
-    [buttonText]="'ثبت شخص'"
+    [initialData]="addCustomerData()"
+    [buttonText]="'ثبت مشتری'"
     [buttonIcon]="'user-plus'"
-    (onSave)="addPerson($event)"
+    (onSave)="addCustomer($event)"
   />
 </app-modal>
 
-<!-- Edit Person Modal -->
+<!-- Edit Customer Modal -->
 <app-modal 
   [isOpen]="showEditModal()" 
-  [title]="'ویرایش مشخصات شخص'"
+  [title]="'ویرایش مشخصات مشتری'"
   (closed)="closeEditModal()"
 >
   <app-edit-person-form
-    [initialData]="editPersonData()"
-    (onSave)="saveEditedPerson($event)"
+    [initialData]="editCustomerData()"
+    (onSave)="saveEditedCustomer($event)"
   />
 </app-modal>
 
