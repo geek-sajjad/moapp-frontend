@@ -1,7 +1,7 @@
 export interface Transaction {
   id: string;
   personId: string;
-  date: string;
+  transactionDate: Date;
   type: 'debit' | 'credit';
   amount: number;
   description: string;

@@ -128,7 +128,7 @@ export class PersianDatepickerComponent implements OnInit {
   
   formatDisplayValue(): string {
     const val = this.value();
-    return val || '';
+    return val ? this.toPersianNumbers(val) : '';
   }
   
   selectToday(): void {
@@ -140,10 +140,16 @@ export class PersianDatepickerComponent implements OnInit {
       if (!isValid(date)) {
         return '';
       }
-      return formatJalali(date, 'd');
+      const day = formatJalali(date, 'd');
+      return this.toPersianNumbers(day);
     } catch (e) {
       console.error('Error formatting day number:', e);
       return '';
     }
+  }
+  
+  toPersianNumbers(input: string): string {
+    const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    return input.replace(/\d/g, (digit) => persianDigits[parseInt(digit)]);
   }
 }

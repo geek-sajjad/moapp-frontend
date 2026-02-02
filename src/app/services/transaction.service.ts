@@ -2,12 +2,12 @@ import { Injectable, signal } from '@angular/core';
 import { Transaction, CreateTransactionDto } from '../models/transaction.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TransactionService {
   private readonly STORAGE_KEY = 'moein_transactions';
   private transactionsSignal = signal<Transaction[]>([]);
-  
+
   transactions = this.transactionsSignal.asReadonly();
 
   constructor() {
@@ -40,60 +40,61 @@ export class TransactionService {
 
   getTransactionsByPersonId(personId: string): Transaction[] {
     return this.transactionsSignal()
-      .filter(t => t.personId === personId)
+      .filter((t) => t.personId === personId)
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   }
 
   getTransactionById(id: string): Transaction | undefined {
-    return this.transactionsSignal().find(t => t.id === id);
+    return this.transactionsSignal().find((t) => t.id === id);
   }
 
   addTransaction(dto: CreateTransactionDto): Transaction {
     const newTransaction: Transaction = {
       ...dto,
       id: this.generateId(),
-      createdAt: new Date()
+      createdAt: new Date(),
+      transactionDate: new Date(dto.date),
     };
-    
+
     const updatedTransactions = [...this.transactionsSignal(), newTransaction];
     this.transactionsSignal.set(updatedTransactions);
     this.saveToStorage(updatedTransactions);
-    
+
     return newTransaction;
   }
 
   updateTransaction(id: string, dto: Partial<CreateTransactionDto>): Transaction | null {
     const transactions = this.transactionsSignal();
-    const index = transactions.findIndex(t => t.id === id);
-    
+    const index = transactions.findIndex((t) => t.id === id);
+
     if (index === -1) return null;
-    
+
     const updatedTransaction = { ...transactions[index], ...dto };
     const updatedTransactions = [...transactions];
     updatedTransactions[index] = updatedTransaction;
-    
+
     this.transactionsSignal.set(updatedTransactions);
     this.saveToStorage(updatedTransactions);
-    
+
     return updatedTransaction;
   }
 
   deleteTransaction(id: string): boolean {
     const transactions = this.transactionsSignal();
-    const filteredTransactions = transactions.filter(t => t.id !== id);
-    
+    const filteredTransactions = transactions.filter((t) => t.id !== id);
+
     if (filteredTransactions.length === transactions.length) return false;
-    
+
     this.transactionsSignal.set(filteredTransactions);
     this.saveToStorage(filteredTransactions);
-    
+
     return true;
   }
 
   deleteTransactionsByPersonId(personId: string): void {
     const transactions = this.transactionsSignal();
-    const filteredTransactions = transactions.filter(t => t.personId !== personId);
-    
+    const filteredTransactions = transactions.filter((t) => t.personId !== personId);
+
     this.transactionsSignal.set(filteredTransactions);
     this.saveToStorage(filteredTransactions);
   }
