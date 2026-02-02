@@ -5,7 +5,7 @@ A Persian/Farsi personal accounting ledger application built with Angular 21 and
 ## Features
 
 - ✅ User authentication (login/logout)
-- ✅ Manage people/contacts
+- ✅ Manage customers/contacts
 - ✅ Track transactions (debit/credit)
 - ✅ Calculate balances automatically
 - ✅ Search and filter
@@ -54,7 +54,7 @@ npm run build
 src/app/
 ├── components/
 │   ├── login/              # Login component
-│   ├── person-list/        # People management
+│   ├── customer-list/      # Customer management
 │   ├── transaction-view/   # Transaction management
 │   └── ui/                 # Shared UI components
 ├── models/                 # TypeScript interfaces
@@ -74,10 +74,10 @@ src/app/
 ### Authentication
 Simple mock authentication system using local storage. Users must log in to access the application.
 
-### Person Management
-- Add new people/contacts
-- Edit person details (name, phone, address)
-- Delete people (with confirmation)
+### Customer Management
+- Add new customers/contacts
+- Edit customer details (name, phone, address)
+- Delete customers (with confirmation)
 - Search by name
 
 ### Transaction Management
@@ -85,7 +85,7 @@ Simple mock authentication system using local storage. Users must log in to acce
 - Persian date support
 - Edit and delete transactions
 - Automatic balance calculation
-- Transaction history per person
+- Transaction history per customer
 
 ### Data Export
 - Export all data to JSON format
