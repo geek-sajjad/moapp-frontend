@@ -1,72 +1,68 @@
-import { Component, input, output, signal, effect, HostListener, ElementRef, OnInit, computed } from '@angular/core';
+import {
+  Component,
+  input,
+  output,
+  signal,
+  effect,
+  HostListener,
+  ElementRef,
+  OnInit,
+  computed,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../icon/icon.component';
-import { format as formatJalali, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, getDay, isSameDay, parse as parseJalali, isValid } from 'date-fns-jalali';
+import { PersianCalendarService } from '../../../services/persian-calendar.service';
 
 @Component({
   selector: 'app-persian-datepicker',
   imports: [CommonModule, IconComponent],
   templateUrl: './persian-datepicker.component.html',
-  styles: [`
-    :host {
-      display: block;
-      position: relative;
-    }
-  `]
+  styles: [
+    `
+      :host {
+        display: block;
+        position: relative;
+      }
+    `,
+  ],
 })
 export class PersianDatepickerComponent implements OnInit {
-  value = input<string>('');
+  value = input<string>(''); // Expects Gregorian ISO string (e.g., "2024-02-01T00:00:00.000Z")
   placeholder = input<string>('تاریخ را انتخاب کنید');
-  
-  onChange = output<string>();
-  
+
+  onChange = output<string>(); // Emits Gregorian ISO string
+
   isOpen = signal<boolean>(false);
-  currentMonth = signal<Date>(new Date());
-  selectedDate = signal<Date | null>(null);
+  currentMonth = signal<Date>(new Date()); // Gregorian Date for internal use
+  selectedDate = signal<Date | null>(null); // Gregorian Date stored internally
   monthName = computed(() => {
-    try {
-      const date = this.currentMonth();
-      if (!isValid(date)) {
-        return '';
-      }
-      return formatJalali(date, 'MMMM yyyy');
-    } catch (e) {
-      console.error('Error formatting month name:', e);
-      return '';
-    }
+    const formatted = this.calendarService.formatMonthName(this.currentMonth());
+    return this.calendarService.toPersianNumbers(formatted);
   });
-  calendarDays = computed(() => {
-    const current = this.currentMonth();
-    if (!isValid(current)) {
-      return [];
-    }
-    const start = startOfMonth(current);
-    const end = endOfMonth(current);
-    const days = eachDayOfInterval({ start, end });
+  calendarDays = computed(() => this.calendarService.getCalendarDays(this.currentMonth()));
 
-    // Get the day of week for the first day (Saturday = 0 in Jalali)
-    const firstDayOfWeek = (getDay(start) + 1) % 7; // Convert to Jalali week
-
-    // Add empty cells for days before the first day of the month
-    const emptyDays = Array(firstDayOfWeek).fill(null);
-
-    return [...emptyDays, ...days];
-  });
-  
-  weekDays = ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'];
-  
-  constructor(private elementRef: ElementRef) {
-    effect(() => {
-      const val = this.value();
-      if (val) {
-        // Schedule the update to avoid ExpressionChangedAfterItHasBeenCheckedError
-        setTimeout(() => {
-          this.updateDateFromValue(val);
-        }, 0);
-      }
-    }, { allowSignalWrites: true });
+  get weekDays(): string[] {
+    return this.calendarService.weekDays;
   }
-  
+
+  constructor(
+    private elementRef: ElementRef,
+    private calendarService: PersianCalendarService,
+  ) {
+    effect(
+      () => {
+        const val = this.value();
+        if (val) {
+          // Schedule the update to avoid ExpressionChangedAfterItHasBeenCheckedError
+          setTimeout(() => {
+            this.updateDateFromValue(val);
+          }, 0);
+        }
+      },
+      { allowSignalWrites: true },
+    );
+  }
+
   ngOnInit(): void {
     // Initialize with current value if available
     const val = this.value();
@@ -74,82 +70,63 @@ export class PersianDatepickerComponent implements OnInit {
       this.updateDateFromValue(val);
     }
   }
-  
+
   private updateDateFromValue(val: string): void {
-    try {
-      // Parse Persian date string (e.g., "1403/11/13")
-      const parsedDate = parseJalali(val, 'yyyy/MM/dd', new Date());
-      if (isValid(parsedDate)) {
-        this.selectedDate.set(parsedDate);
-        this.currentMonth.set(parsedDate);
-      }
-    } catch (e) {
-      console.error('Invalid date format:', e);
+    const parsedDate = this.calendarService.parseGregorianDate(val);
+    if (parsedDate) {
+      this.selectedDate.set(parsedDate);
+      this.currentMonth.set(parsedDate);
     }
   }
-  
+
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     if (!this.elementRef.nativeElement.contains(event.target)) {
       this.isOpen.set(false);
     }
   }
-  
+
   toggleCalendar(): void {
     this.isOpen.set(!this.isOpen());
   }
-  
+
   previousMonth(): void {
-    this.currentMonth.set(subMonths(this.currentMonth(), 1));
+    this.currentMonth.set(this.calendarService.getPreviousMonth(this.currentMonth()));
   }
-  
+
   nextMonth(): void {
-    this.currentMonth.set(addMonths(this.currentMonth(), 1));
+    this.currentMonth.set(this.calendarService.getNextMonth(this.currentMonth()));
   }
-  
+
   selectDate(date: Date | null): void {
-    if (!date || !isValid(date)) return;
-    
+    if (!this.calendarService.isValidDate(date)) return;
+
+    // Store as Gregorian Date
     this.selectedDate.set(date);
-    const formattedDate = formatJalali(date, 'yyyy/MM/dd');
-    this.onChange.emit(formattedDate);
+    console.log(this.selectedDate());
+
+    // Emit Gregorian ISO string for backend
+    this.onChange.emit(this.calendarService.toISOString(date!));
     this.isOpen.set(false);
   }
-  
+
   isSelectedDate(date: Date | null): boolean {
-    if (!date || !this.selectedDate()) return false;
-    return isSameDay(date, this.selectedDate()!);
+    return this.calendarService.isSameDay(date, this.selectedDate());
   }
-  
+
   isToday(date: Date | null): boolean {
-    if (!date) return false;
-    return isSameDay(date, new Date());
+    return this.calendarService.isToday(date);
   }
-  
+
   formatDisplayValue(): string {
-    const val = this.value();
-    return val ? this.toPersianNumbers(val) : '';
+    return this.calendarService.formatDisplayValue(this.value());
   }
-  
+
   selectToday(): void {
-    this.selectDate(new Date());
+    this.selectDate(this.calendarService.getCurrentDate());
   }
-  
+
   getPersianDayNumber(date: Date): string {
-    try {
-      if (!isValid(date)) {
-        return '';
-      }
-      const day = formatJalali(date, 'd');
-      return this.toPersianNumbers(day);
-    } catch (e) {
-      console.error('Error formatting day number:', e);
-      return '';
-    }
-  }
-  
-  toPersianNumbers(input: string): string {
-    const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-    return input.replace(/\d/g, (digit) => persianDigits[parseInt(digit)]);
+    return this.calendarService.getPersianDayNumber(date);
   }
 }
