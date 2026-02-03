@@ -1,11 +1,11 @@
 import { Component, signal, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { PersonService } from '../../services/person.service';
+import { CustomerService } from '../../services/customer.service';
 import { TransactionService } from '../../services/transaction.service';
 import { AuthService } from '../../services/auth.service';
 import { AlertService } from '../../services/alert.service';
-import { Person, CreatePersonDto } from '../../models/person.model';
+import { Customer, CreateCustomerDto, UpdateCustomerDto } from '../../models/customer.model';
 import { ButtonComponent } from '../ui/button/button.component';
 import { ModalComponent } from '../ui/modal/modal.component';
 import { ConfirmDialogComponent } from '../ui/confirm-dialog/confirm-dialog.component';
@@ -13,7 +13,7 @@ import { IconComponent } from '../ui/icon/icon.component';
 import { AppHeaderComponent } from './app-header/app-header.component';
 import { SearchBarComponent } from './search-bar/search-bar.component';
 import { CustomerCardComponent } from './customer-card/customer-card.component';
-import { EditPersonFormComponent, PersonFormData } from '../transaction-view/edit-person-form/edit-person-form.component';
+import { CustomerFormComponent, CustomerFormData } from './customer-form/customer-form.component';
 
 @Component({
   selector: 'app-customer-list',
@@ -26,42 +26,44 @@ import { EditPersonFormComponent, PersonFormData } from '../transaction-view/edi
     AppHeaderComponent,
     SearchBarComponent,
     CustomerCardComponent,
-    EditPersonFormComponent
+    CustomerFormComponent
   ],
   templateUrl: './customer-list.component.html',
   styles: []
 })
 export class CustomerListComponent implements OnInit {
   private router = inject(Router);
-  private personService = inject(PersonService);
+  private customerService = inject(CustomerService);
   private transactionService = inject(TransactionService);
   private authService = inject(AuthService);
   private alertService = inject(AlertService);
 
   searchTerm = signal<string>('');
+  isLoading = signal<boolean>(false);
+  
   customers = computed(() => {
     const term = this.searchTerm();
     if (!term) {
-      return this.personService.people();
+      return this.customerService.customers();
     }
-    return this.personService.searchPeople(term);
+    return this.customerService.searchCustomers(term);
   });
 
   // Add Customer Modal
   showAddModal = signal<boolean>(false);
-  addCustomerData = signal<PersonFormData>({
+  addCustomerData = signal<CustomerFormData>({
     name: '',
-    phone: '',
-    address: ''
+    phoneNumber: '',
+    description: ''
   });
 
   // Edit Customer Modal
   showEditModal = signal<boolean>(false);
   editingCustomerId = signal<string>('');
-  editCustomerData = signal<PersonFormData>({
+  editCustomerData = signal<CustomerFormData>({
     name: '',
-    phone: '',
-    address: ''
+    phoneNumber: '',
+    description: ''
   });
 
   // Confirm Dialog
@@ -72,7 +74,21 @@ export class CustomerListComponent implements OnInit {
   currentUser = this.authService.currentUser;
 
   ngOnInit(): void {
-    // Component initialized
+    this.loadCustomers();
+  }
+
+  loadCustomers(): void {
+    this.isLoading.set(true);
+    this.customerService.getCustomers().subscribe({
+      next: () => {
+        this.isLoading.set(false);
+      },
+      error: (error) => {
+        this.isLoading.set(false);
+        console.error('Error loading customers:', error);
+        this.alertService.showError('خطا در بارگذاری لیست مشتریان');
+      }
+    });
   }
 
   onSearchChange(term: string): void {
@@ -82,8 +98,8 @@ export class CustomerListComponent implements OnInit {
   openAddModal(): void {
     this.addCustomerData.set({
       name: '',
-      phone: '',
-      address: ''
+      phoneNumber: '',
+      description: ''
     });
     this.showAddModal.set(true);
   }
@@ -92,29 +108,44 @@ export class CustomerListComponent implements OnInit {
     this.showAddModal.set(false);
   }
 
-  addCustomer(formData: PersonFormData): void {
+  addCustomer(formData: CustomerFormData): void {
     if (!formData.name.trim()) {
       this.alertService.showError('لطفاً نام مشتری را وارد کنید.');
       return;
     }
 
-    const dto: CreatePersonDto = {
+    if (!formData.phoneNumber.trim()) {
+      this.alertService.showError('لطفاً شماره تماس را وارد کنید.');
+      return;
+    }
+
+    const dto: CreateCustomerDto = {
       name: formData.name.trim(),
-      phone: formData.phone.trim(),
-      address: formData.address.trim()
+      phoneNumber: formData.phoneNumber.trim(),
+      description: formData.description.trim() || undefined
     };
 
-    this.personService.addPerson(dto);
-    this.alertService.showSuccess('مشتری با موفقیت اضافه شد.');
-    this.closeAddModal();
+    this.isLoading.set(true);
+    this.customerService.createCustomer(dto).subscribe({
+      next: () => {
+        this.isLoading.set(false);
+        this.alertService.showSuccess('مشتری با موفقیت اضافه شد.');
+        this.closeAddModal();
+      },
+      error: (error) => {
+        this.isLoading.set(false);
+        console.error('Error creating customer:', error);
+        this.alertService.showError('خطا در افزودن مشتری');
+      }
+    });
   }
 
-  openEditModal(customer: Person): void {
+  openEditModal(customer: Customer): void {
     this.editingCustomerId.set(customer.id);
     this.editCustomerData.set({
       name: customer.name,
-      phone: customer.phone || '',
-      address: customer.address || ''
+      phoneNumber: customer.phoneNumber || '',
+      description: customer.description || ''
     });
     this.showEditModal.set(true);
   }
@@ -123,43 +154,59 @@ export class CustomerListComponent implements OnInit {
     this.showEditModal.set(false);
   }
 
-  saveEditedCustomer(formData: PersonFormData): void {
+  saveEditedCustomer(formData: CustomerFormData): void {
     if (!formData.name.trim()) {
       this.alertService.showError('لطفاً نام مشتری را وارد کنید.');
       return;
     }
 
-    const dto: Partial<CreatePersonDto> = {
+    if (!formData.phoneNumber.trim()) {
+      this.alertService.showError('لطفاً شماره تماس را وارد کنید.');
+      return;
+    }
+
+    const dto: UpdateCustomerDto = {
       name: formData.name.trim(),
-      phone: formData.phone.trim(),
-      address: formData.address.trim()
+      phoneNumber: formData.phoneNumber.trim(),
+      description: formData.description.trim() || undefined
     };
 
-    const result = this.personService.updatePerson(this.editingCustomerId(), dto);
-    
-    if (result) {
-      this.alertService.showSuccess('مشخصات مشتری با موفقیت به‌روزرسانی شد.');
-      this.closeEditModal();
-    } else {
-      this.alertService.showError('خطا در به‌روزرسانی مشتری.');
-    }
+    this.isLoading.set(true);
+    this.customerService.updateCustomer(this.editingCustomerId(), dto).subscribe({
+      next: () => {
+        this.isLoading.set(false);
+        this.alertService.showSuccess('مشخصات مشتری با موفقیت به‌روزرسانی شد.');
+        this.closeEditModal();
+      },
+      error: (error) => {
+        this.isLoading.set(false);
+        console.error('Error updating customer:', error);
+        this.alertService.showError('خطا در به‌روزرسانی مشتری');
+      }
+    });
   }
 
-  // confirmDeleteCustomer(customerId: string): void {
-  //   this.confirmMessage.set('آیا از حذف این مشتری و تمام تراکنش‌های مرتبط با او مطمئن هستید؟');
-  //   this.confirmCallback.set(() => this.deleteCustomer(customerId));
-  //   this.showConfirmDialog.set(true);
-  // }
+  confirmDeleteCustomer(customerId: string): void {
+    this.confirmMessage.set('آیا از حذف این مشتری مطمئن هستید؟');
+    this.confirmCallback.set(() => this.deleteCustomer(customerId));
+    this.showConfirmDialog.set(true);
+  }
 
   deleteCustomer(customerId: string): void {
-    this.transactionService.deleteTransactionsByPersonId(customerId);
-    const success = this.personService.deletePerson(customerId);
-    
-    if (success) {
-      this.alertService.showSuccess('مشتری با موفقیت حذف شد.');
-    } else {
-      this.alertService.showError('خطا در حذف مشتری.');
-    }
+    this.isLoading.set(true);
+    this.customerService.deleteCustomer(customerId).subscribe({
+      next: () => {
+        this.isLoading.set(false);
+        // Also delete related transactions
+        this.transactionService.deleteTransactionsByPersonId(customerId);
+        this.alertService.showSuccess('مشتری با موفقیت حذف شد.');
+      },
+      error: (error) => {
+        this.isLoading.set(false);
+        console.error('Error deleting customer:', error);
+        this.alertService.showError('خطا در حذف مشتری');
+      }
+    });
   }
 
   onConfirm(confirmed: boolean): void {
@@ -172,7 +219,7 @@ export class CustomerListComponent implements OnInit {
     this.confirmCallback.set(null);
   }
 
-  viewTransactions(customer: Person): void {
+  viewTransactions(customer: Customer): void {
     this.router.navigate(['/transactions', customer.id]);
   }
 

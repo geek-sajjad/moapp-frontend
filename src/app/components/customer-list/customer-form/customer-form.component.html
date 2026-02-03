@@ -1,0 +1,50 @@
+<div class="form-container">
+  <div class="form-group">
+    <label for="name" class="form-label">نام مشتری *</label>
+    <input
+      type="text"
+      id="name"
+      class="form-input"
+      [value]="formName()"
+      (input)="formName.set($any($event.target).value)"
+      placeholder="نام مشتری را وارد کنید"
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="phoneNumber" class="form-label">شماره تماس *</label>
+    <input
+      type="text"
+      id="phoneNumber"
+      class="form-input"
+      [value]="formPhoneNumber()"
+      (input)="formPhoneNumber.set($any($event.target).value)"
+      placeholder="مثال: +989123456789"
+      dir="ltr"
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="description" class="form-label">توضیحات</label>
+    <textarea
+      id="description"
+      class="form-input form-textarea"
+      [value]="formDescription()"
+      (input)="formDescription.set($any($event.target).value)"
+      placeholder="توضیحات اضافی (اختیاری)"
+      rows="3"
+    ></textarea>
+  </div>
+
+  <div class="form-actions">
+    <app-button
+      variant="default"
+      size="lg"
+      [fullWidth]="true"
+      (onClick)="handleSave()"
+    >
+      <app-icon [name]="buttonIcon()" [size]="20"></app-icon>
+      <span>{{ buttonText() }}</span>
+    </app-button>
+  </div>
+</div>

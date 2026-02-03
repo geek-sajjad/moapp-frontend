@@ -8,7 +8,7 @@
         دفتر معین شخصی
       </h1>
       @if (currentUser(); as user) {
-        <p class="text-gray-600 text-sm font-medium mt-2 mr-11">خوش آمدید، <strong class="text-gray-900 font-extrabold">{{ user }}</strong></p>
+        <p class="text-gray-600 text-sm font-medium mt-2 mr-11">خوش آمدید، <strong class="text-gray-900 font-extrabold">{{ user.fullName }}</strong></p>
       }
     </div>
     <app-button 

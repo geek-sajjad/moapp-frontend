@@ -9,8 +9,11 @@
       </div>
       <div class="flex-grow min-w-0">
         <h3 class="font-extrabold text-gray-900 text-base group-hover:text-blue-600 transition-colors truncate">{{ customer().name }}</h3>
-        @if (customer().phone) {
-          <p class="text-gray-600 text-sm font-medium mt-1 truncate">{{ customer().phone }}</p>
+        @if (customer().phoneNumber) {
+          <p class="text-gray-600 text-sm font-medium mt-1 truncate" dir="ltr">{{ customer().phoneNumber }}</p>
+        }
+        @if (customer().description) {
+          <p class="text-gray-500 text-xs mt-1 truncate">{{ customer().description }}</p>
         }
       </div>
     </div>

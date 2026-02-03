@@ -1,6 +1,6 @@
 import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Person } from '../../../models/person.model';
+import { Customer } from '../../../models/customer.model';
 import { IconComponent } from '../../ui/icon/icon.component';
 
 @Component({
@@ -10,8 +10,8 @@ import { IconComponent } from '../../ui/icon/icon.component';
   styles: []
 })
 export class CustomerCardComponent {
-  customer = input.required<Person>();
-  onClick = output<Person>();
+  customer = input.required<Customer>();
+  onClick = output<Customer>();
 
   handleClick(): void {
     this.onClick.emit(this.customer());

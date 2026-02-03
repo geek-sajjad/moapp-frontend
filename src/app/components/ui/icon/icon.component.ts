@@ -27,7 +27,8 @@ export type IconName =
   | 'info'
   | 'user-plus'
   | 'chevron-left'
-  | 'chevron-right';
+  | 'chevron-right'
+  | 'loading';
 
 @Component({
   selector: 'app-icon',
