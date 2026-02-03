@@ -19,7 +19,7 @@ export class TransactionFormComponent {
   onCancel = output<void>();
 
   formDate = signal<string>('');
-  formType = signal<'DEBIT' | 'CREDIT'>('DEBIT');
+  formType = signal<'DEBIT' | 'CREDIT'>('CREDIT');
   formAmount = signal<string>('');
   formDescription = signal<string>('');
 

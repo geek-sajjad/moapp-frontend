@@ -61,12 +61,7 @@ export class TransactionViewComponent implements OnInit {
   });
 
   // Transaction Form
-  transactionFormData = signal<TransactionFormData>({
-    transactionDate: '',
-    type: 'CREDIT',
-    amount: '',
-    description: ''
-  });
+  transactionFormData = signal<TransactionFormData | null>(null);
   editingTransactionId = signal<string>('');
   isEditing = computed(() => !!this.editingTransactionId());
 
@@ -92,7 +87,7 @@ export class TransactionViewComponent implements OnInit {
         this.loadTransactions(id);
         this.transactionFormData.set({
           transactionDate: this.dateUtil.getCurrentPersianDate(),
-          type: 'DEBIT',
+          type: 'CREDIT',
           amount: '',
           description: ''
         });
