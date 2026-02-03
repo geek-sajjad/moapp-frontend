@@ -8,13 +8,13 @@ import { AlertService } from '../../services/alert.service';
 import { ExportService } from '../../services/export.service';
 import { DateUtilService } from '../../services/date-util.service';
 import { Person } from '../../models/person.model';
-import { Transaction, CreateTransactionDto } from '../../models/transaction.model';
+import { Transaction, CreateTransactionDto, TransactionFormData } from '../../models/transaction.model';
 import { ButtonComponent } from '../ui/button/button.component';
 import { ModalComponent } from '../ui/modal/modal.component';
 import { ConfirmDialogComponent } from '../ui/confirm-dialog/confirm-dialog.component';
 import { IconComponent } from '../ui/icon/icon.component';
 import { PersonInfoCardComponent } from './person-info-card/person-info-card.component';
-import { TransactionFormComponent, TransactionFormData } from './transaction-form/transaction-form.component';
+import { TransactionFormComponent } from './transaction-form/transaction-form.component';
 import { TransactionListComponent } from './transaction-list/transaction-list.component';
 import { EditPersonFormComponent, PersonFormData } from './edit-person-form/edit-person-form.component';
 
@@ -56,8 +56,8 @@ export class TransactionViewComponent implements OnInit {
 
   // Transaction Form
   transactionFormData = signal<TransactionFormData>({
-    date: '',
-    type: 'debit',
+    transactionDate: '',
+    type: 'credit',
     amount: '',
     description: ''
   });
@@ -85,7 +85,7 @@ export class TransactionViewComponent implements OnInit {
         this.loadPersonData(id);
         this.loadTransactions(id);
         this.transactionFormData.set({
-          date: this.dateUtil.getCurrentPersianDate(),
+          transactionDate: this.dateUtil.getCurrentPersianDate(),
           type: 'debit',
           amount: '',
           description: ''
@@ -114,7 +114,7 @@ export class TransactionViewComponent implements OnInit {
 
     const dto: CreateTransactionDto = {
       personId: this.personId(),
-      date: formData.date,
+      transactionDate: formData.transactionDate,
       type: formData.type,
       amount: amount,
       description: formData.description
@@ -167,7 +167,7 @@ export class TransactionViewComponent implements OnInit {
   clearTransactionForm(): void {
     this.editingTransactionId.set('');
     this.transactionFormData.set({
-      date: this.dateUtil.getCurrentPersianDate(),
+      transactionDate: this.dateUtil.getCurrentPersianDate(),
       type: 'debit',
       amount: '',
       description: ''

@@ -53,7 +53,7 @@ export class TransactionService {
       ...dto,
       id: this.generateId(),
       createdAt: new Date(),
-      transactionDate: new Date(dto.date),
+      transactionDate: (dto.transactionDate),
     };
 
     const updatedTransactions = [...this.transactionsSignal(), newTransaction];

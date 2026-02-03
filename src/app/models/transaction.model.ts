@@ -1,7 +1,7 @@
 export interface Transaction {
   id: string;
   personId: string;
-  transactionDate: Date;
+  transactionDate: string;
   type: 'debit' | 'credit';
   amount: number;
   description: string;
@@ -10,8 +10,15 @@ export interface Transaction {
 
 export interface CreateTransactionDto {
   personId: string;
-  date: string;
+  transactionDate: string;
   type: 'debit' | 'credit';
   amount: number;
+  description: string;
+}
+
+export interface TransactionFormData {
+  transactionDate: string;
+  type: 'debit' | 'credit';
+  amount: string;
   description: string;
 }

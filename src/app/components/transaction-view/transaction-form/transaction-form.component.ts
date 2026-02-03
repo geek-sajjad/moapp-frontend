@@ -3,13 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ButtonComponent } from '../../ui/button/button.component';
 import { IconComponent } from '../../ui/icon/icon.component';
 import { PersianDatepickerComponent } from '../../ui/persian-datepicker/persian-datepicker.component';
-
-export interface TransactionFormData {
-  date: string;
-  type: 'debit' | 'credit';
-  amount: string;
-  description: string;
-}
+import { TransactionFormData } from '../../../models/transaction.model';
 
 @Component({
   selector: 'app-transaction-form',
@@ -33,7 +27,7 @@ export class TransactionFormComponent {
     effect(() => {
       const data = this.initialData();
       if (data) {
-        this.formDate.set(data.date);
+        this.formDate.set(data.transactionDate);
         this.formType.set(data.type);
         this.formAmount.set(data.amount);
         this.formDescription.set(data.description);
@@ -42,8 +36,9 @@ export class TransactionFormComponent {
   }
 
   handleSave(): void {
+    console.log(this.formDate());
     this.onSave.emit({
-      date: this.formDate(),
+      transactionDate: this.formDate(),
       type: this.formType(),
       amount: this.formAmount(),
       description: this.formDescription()

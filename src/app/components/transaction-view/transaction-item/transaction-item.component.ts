@@ -24,7 +24,7 @@ export class TransactionItemComponent {
     return this.dateUtil.formatNumber(num);
   }
 
-  // transactionDate = computed(() => this.pCalanderService.formatDisplayValue(this.transaction().transactionDate.toString()))
-
-  
+  transactionDate = computed(() => 
+    this.pCalanderService.formatDisplayValue(this.transaction().transactionDate.toString())
+  );
 }

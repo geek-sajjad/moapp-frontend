@@ -28,9 +28,11 @@ import { PersianCalendarService } from '../../../services/persian-calendar.servi
 })
 export class PersianDatepickerComponent implements OnInit {
   value = input<string>(''); // Expects Gregorian ISO string (e.g., "2024-02-01T00:00:00.000Z")
+  // value = input<Date>();
   placeholder = input<string>('تاریخ را انتخاب کنید');
 
   onChange = output<string>(); // Emits Gregorian ISO string
+  // onChange = output<Date>(); // Emits Gregorian Date
 
   isOpen = signal<boolean>(false);
   currentMonth = signal<Date>(new Date()); // Gregorian Date for internal use
