@@ -1,24 +1,40 @@
 export interface Transaction {
   id: string;
-  personId: string;
-  transactionDate: string;
-  type: 'debit' | 'credit';
   amount: number;
+  type: 'CREDIT' | 'DEBIT';
+  date: string;
   description: string;
-  createdAt: Date;
+  userId: string;
+  customerId: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface CreateTransactionDto {
-  personId: string;
-  transactionDate: string;
-  type: 'debit' | 'credit';
   amount: number;
+  type: 'CREDIT' | 'DEBIT';
+  date: string;
   description: string;
+  customerId: string;
+}
+
+export interface TransactionSummary {
+  totalBalance: number;
+  totalType: 'CREDIT' | 'DEBIT';
+  totalTransactions: number;
 }
 
 export interface TransactionFormData {
   transactionDate: string;
-  type: 'debit' | 'credit';
+  type: 'CREDIT' | 'DEBIT';
   amount: string;
   description: string;
+}
+
+export interface ApiResponse<T> {
+  data: T;
+  meta: {
+    timestamp: number;
+    date: string;
+  };
 }

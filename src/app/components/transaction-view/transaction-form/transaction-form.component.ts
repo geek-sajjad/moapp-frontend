@@ -19,7 +19,7 @@ export class TransactionFormComponent {
   onCancel = output<void>();
 
   formDate = signal<string>('');
-  formType = signal<'debit' | 'credit'>('debit');
+  formType = signal<'DEBIT' | 'CREDIT'>('DEBIT');
   formAmount = signal<string>('');
   formDescription = signal<string>('');
 
@@ -50,7 +50,7 @@ export class TransactionFormComponent {
   }
 
   getTransactionTypeClass(): string {
-    return this.formType() === 'debit' 
+    return this.formType() === 'DEBIT' 
       ? 'border-red-500 bg-red-50 text-red-700'
       : 'border-green-500 bg-green-50 text-green-700';
   }

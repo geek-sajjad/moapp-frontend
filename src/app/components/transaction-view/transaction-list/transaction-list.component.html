@@ -3,14 +3,14 @@
     <h2 class="text-lg font-extrabold text-gray-900 flex items-center gap-2.5">
       <app-icon name="file-text" [size]="20" class="text-blue-600" />
       تراکنش‌ها
-      @if (transactions().length > 0) {
+      @if (transactions() && transactions().length > 0) {
         <span class="text-sm font-semibold text-gray-600">({{ transactions().length }})</span>
       }
     </h2>
   </div>
 
   <div class="divide-y divide-border">
-    @if (transactions().length === 0) {
+    @if (!transactions() || transactions().length === 0) {
       <div class="p-10 text-center">
         <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gray-100 mb-4">
           <app-icon name="file" [size]="36" class="text-gray-400" />
@@ -20,8 +20,10 @@
       </div>
     }
 
-    @for (transaction of transactions(); track transaction.id) {
-      <app-transaction-item [transaction]="transaction" />
+    @if (transactions()) {
+      @for (transaction of transactions(); track transaction.id) {
+        <app-transaction-item [transaction]="transaction" />
+      }
     }
   </div>
 </div>

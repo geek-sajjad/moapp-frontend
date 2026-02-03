@@ -43,9 +43,9 @@ export class ExportService {
     message += `--------------------------\n`;
 
     transactions.forEach(t => {
-      const type = t.type === 'debit' ? 'طلبتان' : 'بدهی‌تان';
+      const type = t.type === 'DEBIT' ? 'طلبتان' : 'بدهی‌تان';
       message += `${t.date}: ${t.amount.toLocaleString('fa-IR')} تومان (${type})\n`;
-      total += t.type === 'debit' ? t.amount : -t.amount;
+      total += t.type === 'DEBIT' ? t.amount : -t.amount;
     });
 
     message += `--------------------------\n`;

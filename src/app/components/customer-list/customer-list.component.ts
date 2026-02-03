@@ -239,8 +239,7 @@ export class CustomerListComponent implements OnInit {
     this.customerService.deleteCustomer(customerId).subscribe({
       next: () => {
         this.isLoading.set(false);
-        // Also delete related transactions
-        this.transactionService.deleteTransactionsByPersonId(customerId);
+        // Note: Backend should handle cascading delete of transactions
         this.alertService.showSuccess('مشتری با موفقیت حذف شد.');
       },
       error: (error) => {

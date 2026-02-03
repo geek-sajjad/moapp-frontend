@@ -50,17 +50,19 @@ export class TransactionViewComponent implements OnInit {
   personId = signal<string>('');
   currentPerson = signal<Person | undefined>(undefined);
   transactions = signal<Transaction[]>([]);
-  
+  transactionsLoading = signal<boolean>(false);
+
   balance = computed(() => {
-    return this.transactions().reduce((total, t) => {
-      return total + (t.type === 'debit' ? -t.amount : t.amount);
+    const list = this.transactions() ?? [];
+    return list.reduce((total, t) => {
+      return total + (t.type === 'DEBIT' ? -t.amount : t.amount);
     }, 0);
   });
 
   // Transaction Form
   transactionFormData = signal<TransactionFormData>({
     transactionDate: '',
-    type: 'credit',
+    type: 'CREDIT',
     amount: '',
     description: ''
   });
@@ -89,7 +91,7 @@ export class TransactionViewComponent implements OnInit {
         this.loadTransactions(id);
         this.transactionFormData.set({
           transactionDate: this.dateUtil.getCurrentPersianDate(),
-          type: 'debit',
+          type: 'DEBIT',
           amount: '',
           description: ''
         });
@@ -120,9 +122,20 @@ export class TransactionViewComponent implements OnInit {
     });
   }
 
-  loadTransactions(personId: string): void {
-    const trans = this.transactionService.getTransactionsByPersonId(personId);
-    this.transactions.set(trans);
+  loadTransactions(customerId: string): void {
+    this.transactionsLoading.set(true);
+    this.transactionService.getCustomerTransactions(customerId).subscribe({
+      next: (transactions) => {
+        this.transactions.set(Array.isArray(transactions) ? transactions : []);
+        this.transactionsLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Error loading transactions:', error);
+        this.transactions.set([]);
+        this.transactionsLoading.set(false);
+        this.alertService.showError('خطا در بارگذاری تراکنش‌ها.');
+      }
+    });
   }
 
   saveTransaction(formData: TransactionFormData): void {
@@ -134,27 +147,25 @@ export class TransactionViewComponent implements OnInit {
     }
 
     const dto: CreateTransactionDto = {
-      personId: this.personId(),
-      transactionDate: formData.transactionDate,
+      customerId: this.personId(),
+      date: formData.transactionDate,
       type: formData.type,
       amount: amount,
       description: formData.description
     };
 
-    if (this.isEditing()) {
-      const result = this.transactionService.updateTransaction(this.editingTransactionId(), dto);
-      if (result) {
-        this.alertService.showSuccess('تراکنش با موفقیت به‌روزرسانی شد.');
-      } else {
-        this.alertService.showError('خطا در به‌روزرسانی تراکنش.');
+    // For now, we only support creating transactions (backend doesn't have update endpoint)
+    this.transactionService.createTransaction(dto).subscribe({
+      next: () => {
+        this.alertService.showSuccess('تراکنش با موفقیت ثبت شد.');
+        this.clearTransactionForm();
+        this.loadTransactions(this.personId());
+      },
+      error: (error) => {
+        console.error('Error creating transaction:', error);
+        this.alertService.showError('خطا در ثبت تراکنش.');
       }
-    } else {
-      this.transactionService.addTransaction(dto);
-      this.alertService.showSuccess('تراکنش با موفقیت ثبت شد.');
-    }
-
-    this.clearTransactionForm();
-    this.loadTransactions(this.personId());
+    });
   }
 
   // editTransaction(transaction: Transaction): void {
@@ -175,21 +186,16 @@ export class TransactionViewComponent implements OnInit {
   // }
 
   deleteTransaction(transactionId: string): void {
-    const success = this.transactionService.deleteTransaction(transactionId);
-    
-    if (success) {
-      this.alertService.showSuccess('تراکنش با موفقیت حذف شد.');
-      this.loadTransactions(this.personId());
-    } else {
-      this.alertService.showError('خطا در حذف تراکنش.');
-    }
+    // Note: Backend doesn't have delete transaction endpoint yet
+    // This is a placeholder for future implementation
+    this.alertService.showError('حذف تراکنش در حال حاضر پشتیبانی نمی‌شود.');
   }
 
   clearTransactionForm(): void {
     this.editingTransactionId.set('');
     this.transactionFormData.set({
       transactionDate: this.dateUtil.getCurrentPersianDate(),
-      type: 'debit',
+      type: 'DEBIT',
       amount: '',
       description: ''
     });

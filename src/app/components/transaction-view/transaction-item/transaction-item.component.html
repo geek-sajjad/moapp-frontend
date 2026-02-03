@@ -1,7 +1,7 @@
 <div class="flex flex-col p-5 hover:bg-gray-50 transition-colors group gap-4">
   <div class="flex items-start gap-3.5">
-    <div [class]="'w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ' + (transaction().type === 'debit' ? 'bg-red-50' : 'bg-green-50')">
-      @if (transaction().type === 'debit') {
+    <div [class]="'w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ' + (transaction().type === 'DEBIT' ? 'bg-red-50' : 'bg-green-50')">
+      @if (transaction().type === 'DEBIT') {
         <app-icon name="minus" [size]="20" [class]="'text-red-600'" />
       } @else {
         <app-icon name="plus" [size]="20" [class]="'text-green-600'" />
@@ -18,9 +18,9 @@
 
   <div class="flex items-center gap-2.5">
     <div 
-      [class]="'text-xl font-extrabold whitespace-nowrap px-4 py-2.5 rounded-xl flex-shrink-0 ' + (transaction().type === 'debit' ? 'text-red-700 bg-red-50' : 'text-green-700 bg-green-50')"
+      [class]="'text-xl font-extrabold whitespace-nowrap px-4 py-2.5 rounded-xl flex-shrink-0 ' + (transaction().type === 'DEBIT' ? 'text-red-700 bg-red-50' : 'text-green-700 bg-green-50')"
     >
-      {{ transaction().type === 'debit' ? '-' : '+' }}{{ formatNumber(transaction().amount) }}
+      {{ transaction().type === 'DEBIT' ? '-' : '+' }}{{ formatNumber(transaction().amount) }}
     </div>
   </div>
 </div>
