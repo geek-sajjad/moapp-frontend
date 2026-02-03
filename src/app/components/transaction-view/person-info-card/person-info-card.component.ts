@@ -5,18 +5,21 @@ import { ButtonComponent } from '../../ui/button/button.component';
 import { IconComponent } from '../../ui/icon/icon.component';
 import { DateUtilService } from '../../../services/date-util.service';
 import { inject } from '@angular/core';
+import { TransactionSummary } from '../../../models/transaction.model';
 
 @Component({
   selector: 'app-person-info-card',
   imports: [CommonModule, ButtonComponent, IconComponent],
   templateUrl: './person-info-card.component.html',
-  styles: []
+  styles: [],
 })
 export class PersonInfoCardComponent {
   private dateUtil = inject(DateUtilService);
 
   person = input.required<Person>();
-  balance = input.required<number>();
+  // balance = input.required<number>();
+  // balanceType = input.required<>();
+  transactionSummray = input.required<TransactionSummary>();
   onEdit = output<void>();
 
   formatNumber(num: number): string {

@@ -101,6 +101,7 @@ export class TransactionService {
       .get<ApiResponse<TransactionSummary>>(`${this.API_URL}/customer/${customerId}/summary`)
       .pipe(
         tap((response) => {
+          console.log(response);
           this.summarySignal.set(response.data);
         }),
         // Extract the data from the response

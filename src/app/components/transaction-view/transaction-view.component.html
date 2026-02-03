@@ -14,11 +14,13 @@
 
     <!-- Person Info Card -->
     @if (currentPerson(); as person) {
-      <app-person-info-card 
-        [person]="person" 
-        [balance]="balance()"
-        (onEdit)="openEditPersonModal()"
-      />
+      @if (transactionSummray(); as summary) {
+        <app-person-info-card 
+          [person]="person"
+          [transactionSummray]="summary"
+          (onEdit)="openEditPersonModal()" 
+        />
+      }
     }
 
     <!-- Transaction Form Card -->

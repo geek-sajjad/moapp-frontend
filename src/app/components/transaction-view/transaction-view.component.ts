@@ -10,7 +10,7 @@ import { ExportService } from '../../services/export.service';
 import { DateUtilService } from '../../services/date-util.service';
 import { Person } from '../../models/person.model';
 import { UpdateCustomerDto } from '../../models/customer.model';
-import { Transaction, CreateTransactionDto, TransactionFormData } from '../../models/transaction.model';
+import { Transaction, CreateTransactionDto, TransactionFormData, TransactionSummary } from '../../models/transaction.model';
 import { ButtonComponent } from '../ui/button/button.component';
 import { ModalComponent } from '../ui/modal/modal.component';
 import { ConfirmDialogComponent } from '../ui/confirm-dialog/confirm-dialog.component';
@@ -51,6 +51,7 @@ export class TransactionViewComponent implements OnInit {
   personId = signal<string>('');
   currentPerson = signal<Person | undefined>(undefined);
   transactions = signal<Transaction[]>([]);
+  transactionSummray = signal<TransactionSummary | null>(null)
   transactionsLoading = signal<boolean>(false);
 
   balance = computed(() => {
@@ -85,6 +86,7 @@ export class TransactionViewComponent implements OnInit {
         this.personId.set(id);
         this.loadPersonData(id);
         this.loadTransactions(id);
+        this.loadTransactionSummra(id);
         this.transactionFormData.set({
           transactionDate: this.dateUtil.getCurrentPersianDate(),
           type: 'CREDIT',
@@ -134,6 +136,23 @@ export class TransactionViewComponent implements OnInit {
     });
   }
 
+  loadTransactionSummra(customerId: string) {
+    this.transactionService.getTransactionSummary(customerId).subscribe({
+      next: (tSummray) => {
+        console.log("got the summary in service level", tSummray)
+        this.transactionSummray.set(tSummray);
+        this.transactionsLoading.set(false);
+      },
+      error: (error)=> {
+        console.error('Error loading transactions:', error);
+        this.transactionSummray.set(null);
+        this.transactionsLoading.set(false);
+        this.alertService.showError('خطا در بارگذاری خلاصه تراکنش ها.');
+
+      }
+    });
+  }
+
   saveTransaction(formData: TransactionFormData): void {
     const amount = parseFloat(formData.amount);
     
@@ -156,6 +175,7 @@ export class TransactionViewComponent implements OnInit {
         this.alertService.showSuccess('تراکنش با موفقیت ثبت شد.');
         this.clearTransactionForm();
         this.loadTransactions(this.personId());
+        this.loadTransactionSummra(this.personId());
       },
       error: (error) => {
         console.error('Error creating transaction:', error);
