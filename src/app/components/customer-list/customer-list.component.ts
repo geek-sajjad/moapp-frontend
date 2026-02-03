@@ -10,6 +10,7 @@ import { ButtonComponent } from '../ui/button/button.component';
 import { ModalComponent } from '../ui/modal/modal.component';
 import { ConfirmDialogComponent } from '../ui/confirm-dialog/confirm-dialog.component';
 import { IconComponent } from '../ui/icon/icon.component';
+import { ToggleComponent } from '../ui/toggle/toggle.component';
 import { AppHeaderComponent } from './app-header/app-header.component';
 import { SearchBarComponent } from './search-bar/search-bar.component';
 import { CustomerCardComponent } from './customer-card/customer-card.component';
@@ -23,6 +24,7 @@ import { CustomerFormComponent, CustomerFormData } from './customer-form/custome
     ModalComponent,
     ConfirmDialogComponent,
     IconComponent,
+    ToggleComponent,
     AppHeaderComponent,
     SearchBarComponent,
     CustomerCardComponent,
@@ -40,6 +42,7 @@ export class CustomerListComponent implements OnInit {
 
   searchTerm = signal<string>('');
   isLoading = signal<boolean>(false);
+  includeArchived = signal<boolean>(false);
   
   customers = computed(() => {
     const term = this.searchTerm();
@@ -79,7 +82,7 @@ export class CustomerListComponent implements OnInit {
 
   loadCustomers(): void {
     this.isLoading.set(true);
-    this.customerService.getCustomers().subscribe({
+    this.customerService.getCustomers(this.includeArchived()).subscribe({
       next: () => {
         this.isLoading.set(false);
       },
@@ -89,6 +92,11 @@ export class CustomerListComponent implements OnInit {
         this.alertService.showError('خطا در بارگذاری لیست مشتریان');
       }
     });
+  }
+
+  onToggleArchived(includeArchived: boolean): void {
+    this.includeArchived.set(includeArchived);
+    this.loadCustomers();
   }
 
   onSearchChange(term: string): void {
@@ -145,7 +153,9 @@ export class CustomerListComponent implements OnInit {
     this.editCustomerData.set({
       name: customer.name,
       phoneNumber: customer.phoneNumber || '',
-      description: customer.description || ''
+      description: customer.description || '',
+      id: customer.id,
+      isArchived: customer.isArchived
     });
     this.showEditModal.set(true);
   }
@@ -182,6 +192,38 @@ export class CustomerListComponent implements OnInit {
         this.isLoading.set(false);
         console.error('Error updating customer:', error);
         this.alertService.showError('خطا در به‌روزرسانی مشتری');
+      }
+    });
+  }
+
+  archiveCustomer(customerId: string): void {
+    this.isLoading.set(true);
+    this.customerService.archiveCustomer(customerId).subscribe({
+      next: () => {
+        this.isLoading.set(false);
+        this.alertService.showSuccess('مشتری با موفقیت آرشیو شد.');
+        this.closeEditModal();
+      },
+      error: (error) => {
+        this.isLoading.set(false);
+        console.error('Error archiving customer:', error);
+        this.alertService.showError('خطا در آرشیو مشتری');
+      }
+    });
+  }
+
+  unarchiveCustomer(customerId: string): void {
+    this.isLoading.set(true);
+    this.customerService.unarchiveCustomer(customerId).subscribe({
+      next: () => {
+        this.isLoading.set(false);
+        this.alertService.showSuccess('مشتری با موفقیت از آرشیو خارج شد.');
+        this.closeEditModal();
+      },
+      error: (error) => {
+        this.isLoading.set(false);
+        console.error('Error unarchiving customer:', error);
+        this.alertService.showError('خطا در خروج از آرشیو مشتری');
       }
     });
   }

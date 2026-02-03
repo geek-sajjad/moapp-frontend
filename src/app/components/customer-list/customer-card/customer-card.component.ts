@@ -12,8 +12,14 @@ import { IconComponent } from '../../ui/icon/icon.component';
 export class CustomerCardComponent {
   customer = input.required<Customer>();
   onClick = output<Customer>();
+  onEdit = output<Customer>();
 
   handleClick(): void {
     this.onClick.emit(this.customer());
+  }
+
+  handleEdit(event: Event): void {
+    event.stopPropagation();
+    this.onEdit.emit(this.customer());
   }
 }

@@ -1,21 +1,42 @@
-<div class="bg-white rounded-xl shadow-md border border-gray-300 hover:shadow-xl hover:border-blue-400 transition-all duration-300 overflow-hidden group animate-slide-up duration-300">
+<div class="bg-white rounded-xl shadow-md border border-gray-300 hover:shadow-xl hover:border-blue-400 transition-all duration-300 overflow-hidden group animate-slide-up duration-300"
+  [class.opacity-60]="customer().isArchived">
   <div class="flex flex-col p-5 gap-3">
-    <div 
-      class="flex items-center gap-3.5 cursor-pointer"
-      (click)="handleClick()"
-    >
-      <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
-        <app-icon name="user" [size]="22" class="text-blue-600" />
+    <div class="flex items-center gap-3.5">
+      <div 
+        class="flex items-center gap-3.5 cursor-pointer flex-grow min-w-0"
+        (click)="handleClick()"
+      >
+        <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors"
+          [class.bg-gray-300]="customer().isArchived"
+          [class.group-hover:bg-gray-400]="customer().isArchived">
+          <app-icon name="user" [size]="22" class="text-blue-600" 
+            [class.text-gray-600]="customer().isArchived" />
+        </div>
+        <div class="flex-grow min-w-0">
+          <div class="flex items-center gap-2">
+            <h3 class="font-extrabold text-gray-900 text-base group-hover:text-blue-600 transition-colors truncate">{{ customer().name }}</h3>
+            @if (customer().isArchived) {
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-gray-200 text-gray-700">
+                <app-icon name="flag" [size]="14" class="text-gray-600" />
+                آرشیو
+              </span>
+            }
+          </div>
+          @if (customer().phoneNumber) {
+            <p class="text-gray-600 text-sm font-medium mt-1 truncate" dir="ltr">{{ customer().phoneNumber }}</p>
+          }
+          @if (customer().description) {
+            <p class="text-gray-500 text-xs mt-1 truncate">{{ customer().description }}</p>
+          }
+        </div>
       </div>
-      <div class="flex-grow min-w-0">
-        <h3 class="font-extrabold text-gray-900 text-base group-hover:text-blue-600 transition-colors truncate">{{ customer().name }}</h3>
-        @if (customer().phoneNumber) {
-          <p class="text-gray-600 text-sm font-medium mt-1 truncate" dir="ltr">{{ customer().phoneNumber }}</p>
-        }
-        @if (customer().description) {
-          <p class="text-gray-500 text-xs mt-1 truncate">{{ customer().description }}</p>
-        }
-      </div>
+      <button
+        (click)="handleEdit($event)"
+        class="flex-shrink-0 w-10 h-10 rounded-lg bg-gray-100 hover:bg-blue-100 flex items-center justify-center transition-colors group/edit"
+        title="ویرایش مشتری"
+      >
+        <app-icon name="edit" [size]="18" class="text-gray-600 group-hover/edit:text-blue-600" />
+      </button>
     </div>
   </div>
 </div>

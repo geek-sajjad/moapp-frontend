@@ -24,8 +24,11 @@ export class CustomerService {
   /**
    * Get all customers
    */
-  getCustomers(): Observable<Customer[]> {
-    return this.http.get<Customer[]>(this.API_URL).pipe(
+  getCustomers(includeArchived: boolean = false): Observable<Customer[]> {
+    const options = includeArchived 
+      ? { params: { includeArchived: 'true' } }
+      : {};
+    return this.http.get<Customer[]>(this.API_URL, options).pipe(
       tap(customers => {
         this.customersSignal.set(customers);
       })
@@ -78,6 +81,40 @@ export class CustomerService {
    */
   getCustomerById(id: string): Observable<Customer> {
     return this.http.get<Customer>(`${this.API_URL}/${id}`);
+  }
+
+  /**
+   * Archive a customer
+   */
+  archiveCustomer(id: string): Observable<Customer> {
+    return this.http.patch<Customer>(`${this.API_URL}/${id}/archive`, {}).pipe(
+      tap(updatedCustomer => {
+        const currentCustomers = this.customersSignal();
+        const index = currentCustomers.findIndex(c => c.id === id);
+        if (index !== -1) {
+          const updatedList = [...currentCustomers];
+          updatedList[index] = updatedCustomer;
+          this.customersSignal.set(updatedList);
+        }
+      })
+    );
+  }
+
+  /**
+   * Unarchive a customer
+   */
+  unarchiveCustomer(id: string): Observable<Customer> {
+    return this.http.patch<Customer>(`${this.API_URL}/${id}/unarchive`, {}).pipe(
+      tap(updatedCustomer => {
+        const currentCustomers = this.customersSignal();
+        const index = currentCustomers.findIndex(c => c.id === id);
+        if (index !== -1) {
+          const updatedList = [...currentCustomers];
+          updatedList[index] = updatedCustomer;
+          this.customersSignal.set(updatedList);
+        }
+      })
+    );
   }
 
   /**

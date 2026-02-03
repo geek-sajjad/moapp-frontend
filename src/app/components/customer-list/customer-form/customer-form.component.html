@@ -36,13 +36,41 @@
     ></textarea>
   </div>
 
-  <app-button 
-    [fullWidth]="true"
-    [size]="'lg'"
-    (clicked)="handleSave()"
-    class="mt-2"
-  >
-    <app-icon [name]="buttonIcon()" [size]="18" />
-    {{ buttonText() }}
-  </app-button>
+  <div class="flex gap-3">
+    <app-button 
+      [fullWidth]="true"
+      [size]="'lg'"
+      (clicked)="handleSave()"
+      class="mt-2"
+    >
+      <app-icon [name]="buttonIcon()" [size]="18" />
+      {{ buttonText() }}
+    </app-button>
+  </div>
+
+  @if (customerId()) {
+    <div class="pt-3 mt-3 border-t border-gray-300">
+      @if (isArchived()) {
+        <app-button 
+          [fullWidth]="true"
+          [size]="'default'"
+          [variant]="'outline'"
+          (clicked)="handleUnarchive()"
+        >
+          <app-icon name="arrow-left" [size]="18" />
+          بازگردانی از آرشیو
+        </app-button>
+      } @else {
+        <app-button 
+          [fullWidth]="true"
+          [size]="'default'"
+          [variant]="'outline'"
+          (clicked)="handleArchive()"
+        >
+          <app-icon name="file" [size]="18" />
+          آرشیو کردن
+        </app-button>
+      }
+    </div>
+  }
 </div>

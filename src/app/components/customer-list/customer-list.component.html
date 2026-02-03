@@ -37,6 +37,13 @@
           افزودن
         </app-button>
       </div>
+      <div class="bg-white rounded-lg shadow-md border border-gray-300 p-3">
+        <app-toggle
+          [checked]="includeArchived()"
+          [label]="'نمایش مشتریان آرشیو شده'"
+          (onChange)="onToggleArchived($event)"
+        />
+      </div>
     </div>
 
     <!-- Customers List -->
@@ -61,6 +68,7 @@
           <app-customer-card 
             [customer]="customer"
             (onClick)="viewTransactions($event)"
+            (onEdit)="openEditModal($event)"
           />
         }
       }
@@ -91,6 +99,8 @@
   <app-customer-form
     [initialData]="editCustomerData()"
     (onSave)="saveEditedCustomer($event)"
+    (onArchive)="archiveCustomer($event)"
+    (onUnarchive)="unarchiveCustomer($event)"
   />
 </app-modal>
 

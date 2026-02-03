@@ -7,6 +7,8 @@ export interface CustomerFormData {
   name: string;
   phoneNumber: string;
   description: string;
+  id?: string;
+  isArchived?: boolean;
 }
 
 @Component({
@@ -20,10 +22,14 @@ export class CustomerFormComponent {
   buttonText = input<string>('ذخیره تغییرات');
   buttonIcon = input<IconName>('save');
   onSave = output<CustomerFormData>();
+  onArchive = output<string>();
+  onUnarchive = output<string>();
 
   formName = signal<string>('');
   formPhoneNumber = signal<string>('');
   formDescription = signal<string>('');
+  customerId = signal<string | undefined>(undefined);
+  isArchived = signal<boolean>(false);
 
   constructor() {
     effect(() => {
@@ -32,6 +38,8 @@ export class CustomerFormComponent {
         this.formName.set(data.name);
         this.formPhoneNumber.set(data.phoneNumber);
         this.formDescription.set(data.description);
+        this.customerId.set(data.id);
+        this.isArchived.set(data.isArchived || false);
       }
     });
   }
@@ -42,5 +50,19 @@ export class CustomerFormComponent {
       phoneNumber: this.formPhoneNumber(),
       description: this.formDescription()
     });
+  }
+
+  handleArchive(): void {
+    const id = this.customerId();
+    if (id) {
+      this.onArchive.emit(id);
+    }
+  }
+
+  handleUnarchive(): void {
+    const id = this.customerId();
+    if (id) {
+      this.onUnarchive.emit(id);
+    }
   }
 }
