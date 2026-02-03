@@ -19,6 +19,7 @@ import { PersonInfoCardComponent } from './person-info-card/person-info-card.com
 import { TransactionFormComponent } from './transaction-form/transaction-form.component';
 import { TransactionListComponent } from './transaction-list/transaction-list.component';
 import { EditPersonFormComponent, PersonFormData } from './edit-person-form/edit-person-form.component';
+import { delay } from 'rxjs';
 
 @Component({
   selector: 'app-transaction-view',
@@ -126,7 +127,7 @@ export class TransactionViewComponent implements OnInit {
     this.transactionsLoading.set(true);
     this.transactionService.getCustomerTransactions(customerId).subscribe({
       next: (transactions) => {
-        this.transactions.set(Array.isArray(transactions) ? transactions : []);
+        this.transactions.set(transactions);
         this.transactionsLoading.set(false);
       },
       error: (error) => {

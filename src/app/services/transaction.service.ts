@@ -2,21 +2,21 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap, map } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { 
-  Transaction, 
-  CreateTransactionDto, 
-  TransactionSummary, 
-  ApiResponse 
+import {
+  Transaction,
+  CreateTransactionDto,
+  TransactionSummary,
+  ApiResponse,
 } from '../models/transaction.model';
 
 /**
  * Transaction Service - Handles all transaction-related API calls
- * 
+ *
  * Available Endpoints:
  * 1. POST /transactions - Create a new transaction
  * 2. GET /transactions/customer/{customerId} - Get all transactions for a customer
  * 3. GET /transactions/customer/{customerId}/summary - Get transaction summary for a customer
- * 
+ *
  * Usage Example:
  * ```typescript
  * // Create a transaction
@@ -30,12 +30,12 @@ import {
  * this.transactionService.createTransaction(dto).subscribe(transaction => {
  *   console.log('Transaction created:', transaction);
  * });
- * 
+ *
  * // Get customer transactions
  * this.transactionService.getCustomerTransactions(customerId).subscribe(transactions => {
  *   console.log('Transactions:', transactions);
  * });
- * 
+ *
  * // Get transaction summary
  * this.transactionService.getTransactionSummary(customerId).subscribe(summary => {
  *   console.log('Summary:', summary);
@@ -47,7 +47,7 @@ import {
 })
 export class TransactionService {
   private readonly API_URL = `${environment.apiUrl}/transactions`;
-  
+
   // Signal to store transactions list for a specific customer
   private transactionsSignal = signal<Transaction[]>([]);
   transactions = this.transactionsSignal.asReadonly();
@@ -64,7 +64,7 @@ export class TransactionService {
    */
   createTransaction(dto: CreateTransactionDto): Observable<Transaction> {
     return this.http.post<ApiResponse<Transaction>>(this.API_URL, dto).pipe(
-      tap(response => {
+      tap((response) => {
         const newTransaction = response.data;
         const currentTransactions = this.transactionsSignal() || [];
         this.transactionsSignal.set([newTransaction, ...currentTransactions]);
@@ -74,7 +74,7 @@ export class TransactionService {
         this.getTransactionSummary(dto.customerId).subscribe();
       }),
       // Extract the data from the response
-      map(response => response.data)
+      map((response) => response.data),
     );
   }
 
@@ -84,11 +84,11 @@ export class TransactionService {
    */
   getCustomerTransactions(customerId: string): Observable<Transaction[]> {
     return this.http.get<ApiResponse<Transaction[]>>(`${this.API_URL}/customer/${customerId}`).pipe(
-      tap(response => {
+      tap((response) => {
         this.transactionsSignal.set(response.data || []);
       }),
       // Extract the data from the response
-      map(response => response.data || [])
+      map((response) => response.data || []),
     );
   }
 
@@ -97,13 +97,15 @@ export class TransactionService {
    * GET /transactions/customer/{customerId}/summary
    */
   getTransactionSummary(customerId: string): Observable<TransactionSummary> {
-    return this.http.get<ApiResponse<TransactionSummary>>(`${this.API_URL}/customer/${customerId}/summary`).pipe(
-      tap(response => {
-        this.summarySignal.set(response.data);
-      }),
-      // Extract the data from the response
-      map(response => response.data)
-    );
+    return this.http
+      .get<ApiResponse<TransactionSummary>>(`${this.API_URL}/customer/${customerId}/summary`)
+      .pipe(
+        tap((response) => {
+          this.summarySignal.set(response.data);
+        }),
+        // Extract the data from the response
+        map((response) => response.data),
+      );
   }
 
   /**
@@ -112,7 +114,7 @@ export class TransactionService {
   getTransactionsByCustomerId(customerId: string): Transaction[] {
     const transactions = this.transactionsSignal() || [];
     return transactions
-      .filter(t => t.customerId === customerId)
+      .filter((t) => t.customerId === customerId)
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   }
 
@@ -121,7 +123,7 @@ export class TransactionService {
    */
   getTransactionById(id: string): Transaction | undefined {
     const transactions = this.transactionsSignal() || [];
-    return transactions.find(t => t.id === id);
+    return transactions.find((t) => t.id === id);
   }
 
   /**

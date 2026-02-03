@@ -9,19 +9,20 @@ import { PersianCalendarService } from '../../../services/persian-calendar.servi
   selector: 'app-transaction-item',
   imports: [CommonModule, IconComponent],
   templateUrl: './transaction-item.component.html',
-  styles: []
+  styles: [],
 })
 export class TransactionItemComponent {
-  constructor(private pCalanderService:PersianCalendarService) {
-    
-  }
+  constructor(private pCalanderService: PersianCalendarService) {}
 
   private dateUtil = inject(DateUtilService);
 
   transaction = input.required<Transaction>();
 
   formatNumber(num: number): string {
-    return this.dateUtil.formatNumber(num);
+    return Number(num).toLocaleString('fa-IR', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    });
   }
 
   transactionDate = computed(() => {
