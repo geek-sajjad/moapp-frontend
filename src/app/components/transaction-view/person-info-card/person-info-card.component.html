@@ -12,12 +12,12 @@
               @if (person().phone) {
                 <div class="flex items-center gap-2">
                   <app-icon name="phone" [size]="14" />
-                  <span class="truncate">{{ person().phone }}</span>
+                  <span class="truncate" dir="ltr">{{ person().phone }}</span>
                 </div>
               }
               @if (person().address) {
                 <div class="flex items-center gap-2">
-                  <app-icon name="map-pin" [size]="14" />
+                  <app-icon name="file-text" [size]="14" />
                   <span class="truncate">{{ person().address }}</span>
                 </div>
               }

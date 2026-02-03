@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { PersonService } from '../../services/person.service';
+import { CustomerService } from '../../services/customer.service';
 import { TransactionService } from '../../services/transaction.service';
 import { AlertService } from '../../services/alert.service';
 import { ExportService } from '../../services/export.service';
 import { DateUtilService } from '../../services/date-util.service';
 import { Person } from '../../models/person.model';
+import { UpdateCustomerDto } from '../../models/customer.model';
 import { Transaction, CreateTransactionDto, TransactionFormData } from '../../models/transaction.model';
 import { ButtonComponent } from '../ui/button/button.component';
 import { ModalComponent } from '../ui/modal/modal.component';
@@ -39,6 +41,7 @@ export class TransactionViewComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private personService = inject(PersonService);
+  private customerService = inject(CustomerService);
   private transactionService = inject(TransactionService);
   private alertService = inject(AlertService);
   private exportService = inject(ExportService);
@@ -95,8 +98,26 @@ export class TransactionViewComponent implements OnInit {
   }
 
   loadPersonData(id: string): void {
-    const person = this.personService.getPersonById(id);
-    this.currentPerson.set(person);
+    // Try to get from CustomerService API first
+    this.customerService.getCustomerById(id).subscribe({
+      next: (customer) => {
+        // Map Customer to Person format for compatibility
+        const person: Person = {
+          id: customer.id,
+          name: customer.name,
+          phone: customer.phoneNumber || undefined,
+          address: customer.description || undefined,
+          createdAt: new Date(customer.createdAt)
+        };
+        this.currentPerson.set(person);
+      },
+      error: (error) => {
+        console.error('Error loading customer:', error);
+        // Fallback to local PersonService
+        const person = this.personService.getPersonById(id);
+        this.currentPerson.set(person);
+      }
+    });
   }
 
   loadTransactions(personId: string): void {
@@ -202,23 +223,29 @@ export class TransactionViewComponent implements OnInit {
 
   saveEditedPerson(formData: PersonFormData): void {
     if (!formData.name.trim()) {
-      this.alertService.showError('لطفاً نام شخص را وارد کنید.');
+      this.alertService.showError('لطفاً نام مشتری را وارد کنید.');
       return;
     }
 
-    const result = this.personService.updatePerson(this.personId(), {
+    // Map PersonFormData to UpdateCustomerDto
+    const dto: UpdateCustomerDto = {
       name: formData.name.trim(),
-      phone: formData.phone.trim(),
-      address: formData.address.trim()
-    });
+      phoneNumber: formData.phone.trim() || undefined,
+      description: formData.address.trim() || undefined
+    };
 
-    if (result) {
-      this.alertService.showSuccess('مشخصات شخص با موفقیت به‌روزرسانی شد.');
-      this.loadPersonData(this.personId());
-      this.closeEditPersonModal();
-    } else {
-      this.alertService.showError('خطا در به‌روزرسانی شخص.');
-    }
+    // Use CustomerService API to update
+    this.customerService.updateCustomer(this.personId(), dto).subscribe({
+      next: () => {
+        this.alertService.showSuccess('مشخصات مشتری با موفقیت به‌روزرسانی شد.');
+        this.loadPersonData(this.personId());
+        this.closeEditPersonModal();
+      },
+      error: (error) => {
+        console.error('Error updating customer:', error);
+        this.alertService.showError('خطا در به‌روزرسانی مشتری.');
+      }
+    });
   }
 
   shareStatement(): void {

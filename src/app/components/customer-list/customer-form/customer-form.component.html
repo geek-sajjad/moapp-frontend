@@ -1,50 +1,48 @@
-<div class="form-container">
-  <div class="form-group">
-    <label for="name" class="form-label">نام مشتری *</label>
+<div class="space-y-5">
+  <div class="space-y-2.5">
+    <label for="name" class="block text-sm font-bold text-gray-900">نام مشتری *</label>
     <input
       type="text"
       id="name"
-      class="form-input"
       [value]="formName()"
       (input)="formName.set($any($event.target).value)"
       placeholder="نام مشتری را وارد کنید"
+      class="w-full min-h-[48px] px-4 py-3 border-2 border-gray-300 bg-white rounded-xl text-base font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:border-blue-500 hover:border-blue-400 placeholder:text-gray-400 placeholder:font-normal touch-manipulation"
     />
   </div>
 
-  <div class="form-group">
-    <label for="phoneNumber" class="form-label">شماره تماس *</label>
+  <div class="space-y-2.5">
+    <label for="phoneNumber" class="block text-sm font-bold text-gray-900">شماره تماس *</label>
     <input
       type="text"
       id="phoneNumber"
-      class="form-input"
       [value]="formPhoneNumber()"
       (input)="formPhoneNumber.set($any($event.target).value)"
       placeholder="مثال: +989123456789"
       dir="ltr"
+      class="w-full min-h-[48px] px-4 py-3 border-2 border-gray-300 bg-white rounded-xl text-base font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:border-blue-500 hover:border-blue-400 placeholder:text-gray-400 placeholder:font-normal touch-manipulation"
     />
   </div>
 
-  <div class="form-group">
-    <label for="description" class="form-label">توضیحات</label>
+  <div class="space-y-2.5">
+    <label for="description" class="block text-sm font-bold text-gray-900">توضیحات</label>
     <textarea
       id="description"
-      class="form-input form-textarea"
       [value]="formDescription()"
       (input)="formDescription.set($any($event.target).value)"
       placeholder="توضیحات اضافی (اختیاری)"
-      rows="3"
+      rows="4"
+      class="w-full px-4 py-3 border-2 border-gray-300 bg-white rounded-xl text-base font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:border-blue-500 hover:border-blue-400 placeholder:text-gray-400 placeholder:font-normal resize-none touch-manipulation"
     ></textarea>
   </div>
 
-  <div class="form-actions">
-    <app-button
-      variant="default"
-      size="lg"
-      [fullWidth]="true"
-      (onClick)="handleSave()"
-    >
-      <app-icon [name]="buttonIcon()" [size]="20"></app-icon>
-      <span>{{ buttonText() }}</span>
-    </app-button>
-  </div>
+  <app-button 
+    [fullWidth]="true"
+    [size]="'lg'"
+    (clicked)="handleSave()"
+    class="mt-2"
+  >
+    <app-icon [name]="buttonIcon()" [size]="18" />
+    {{ buttonText() }}
+  </app-button>
 </div>
