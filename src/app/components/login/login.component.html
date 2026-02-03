@@ -16,6 +16,7 @@
     <!-- Login Form -->
     <app-login-form 
       [errorMessage]="errorMessage()"
+      [isLoading]="isLoading()"
       (onSubmit)="onLogin($event)"
     />
   </div>

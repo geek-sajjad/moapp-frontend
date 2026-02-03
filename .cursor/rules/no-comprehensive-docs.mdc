@@ -1,0 +1,31 @@
+---
+description: No comprehensive markdown documentation generation
+alwaysApply: true
+---
+
+# No Comprehensive Documentation
+
+Do NOT create comprehensive markdown documentation files unless explicitly requested by the user.
+
+## What NOT to Create
+
+- ❌ API documentation files (API_INTEGRATION.md, API_DOCS.md, etc.)
+- ❌ Implementation summary files (IMPLEMENTATION_SUMMARY.md)
+- ❌ Quick start guides (QUICK_START_*.md)
+- ❌ Architecture diagrams in markdown (AUTH_FLOW_DIAGRAM.md, etc.)
+- ❌ Checklist documents (BACKEND_CHECKLIST_*.md)
+- ❌ Any other comprehensive .md files
+
+## When to Create Documentation
+
+ONLY create documentation files when:
+- The user explicitly asks for documentation
+- The user specifically requests a README or markdown file
+- It's a required project file (like package.json, tsconfig.json, etc.)
+
+## What to Do Instead
+
+- Focus on code implementation
+- Add inline code comments where necessary
+- Provide brief explanations in chat responses
+- Keep documentation minimal and in-code

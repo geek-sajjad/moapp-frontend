@@ -17,12 +17,17 @@ export interface LoginCredentials {
 })
 export class LoginFormComponent {
   errorMessage = input<string>('');
+  isLoading = input<boolean>(false);
   onSubmit = output<LoginCredentials>();
 
   username = signal<string>('');
   password = signal<string>('');
 
   handleSubmit(): void {
+    if (this.isLoading()) {
+      return; // Prevent multiple submissions
+    }
+    
     this.onSubmit.emit({
       username: this.username(),
       password: this.password()

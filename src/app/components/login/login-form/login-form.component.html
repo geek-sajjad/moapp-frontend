@@ -53,18 +53,32 @@
       </div>
     }
 
-    <app-button type="submit" [fullWidth]="true" [size]="'lg'" class="mt-2">
-      ورود به حساب کاربری
+    <app-button 
+      type="submit" 
+      [fullWidth]="true" 
+      [size]="'lg'" 
+      [disabled]="isLoading()"
+      class="mt-2"
+    >
+      @if (isLoading()) {
+        <span class="flex items-center justify-center gap-2">
+          <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          در حال ورود...
+        </span>
+      } @else {
+        ورود به حساب کاربری
+      }
     </app-button>
   </form>
 
-  <!-- Card Footer -->
+  <!-- Card Footer (optional - can be removed or customized) -->
   <div class="px-5 py-4 bg-gray-50 border-t border-gray-300">
     <div class="flex items-center justify-center gap-2.5 text-sm text-gray-600">
       <app-icon name="info" [size]="16" />
-      <span class="font-medium"
-        >نام کاربری و رمز عبور: <strong class="text-gray-900 font-bold">admin / admin</strong></span
-      >
+      <span class="font-medium">برای ورود، نام کاربری و رمز عبور خود را وارد کنید</span>
     </div>
   </div>
 </div>
