@@ -122,10 +122,11 @@ export class CustomerService {
    */
   searchCustomers(term: string): Customer[] {
     const lowerTerm = term.toLowerCase();
+    console.log(this.customersSignal()[0].name);
+
     return this.customersSignal().filter(c => 
-      c.name.toLowerCase().includes(lowerTerm) ||
-      c.phoneNumber.includes(lowerTerm) ||
-      (c.description && c.description.toLowerCase().includes(lowerTerm))
+      c.name?.toLowerCase().includes(lowerTerm) ||
+      c.phoneNumber?.toString().includes(lowerTerm)
     );
   }
 }

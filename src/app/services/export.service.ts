@@ -1,15 +1,19 @@
 import { Injectable } from '@angular/core';
 import { PersonService } from './person.service';
 import { TransactionService } from './transaction.service';
+import { PersianCalendarService } from './persian-calendar.service';
+import { DateUtilService } from './date-util.service';
+import { Transaction } from '../models/transaction.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ExportService {
-
   constructor(
     private personService: PersonService,
-    private transactionService: TransactionService
+    private transactionService: TransactionService,
+    private persianCalanderService: PersianCalendarService,
+    private dateUtilService: DateUtilService,
   ) {}
 
   // exportToJson(): void {
@@ -22,7 +26,7 @@ export class ExportService {
   //   const blob = new Blob([jsonData], { type: 'application/json' });
   //   const url = URL.createObjectURL(blob);
   //   const a = document.createElement('a');
-    
+
   //   const date = new Date().toLocaleDateString('fa-IR').replace(/\//g, '-');
   //   a.href = url;
   //   a.download = `moein-data-${date}.json`;
@@ -32,7 +36,7 @@ export class ExportService {
   //   URL.revokeObjectURL(url);
   // }
 
-  shareStatement(personName: string, transactions: any[]): void {
+  shareStatement(personName: string, transactions: Transaction[]): void {
     if (transactions.length === 0) {
       return;
     }
@@ -42,10 +46,12 @@ export class ExportService {
     message += `📅 تاریخ: ${new Date().toLocaleDateString('fa-IR')}\n`;
     message += `--------------------------\n`;
 
-    transactions.forEach(t => {
+    transactions.forEach((t) => {
+      const jalaliDate = this.persianCalanderService.formatDisplayValue(t.date);
+      const amount = this.dateUtilService.formatNumber(t.amount);
       const type = t.type === 'DEBIT' ? 'طلبتان' : 'بدهی‌تان';
-      message += `${t.date}: ${t.amount.toLocaleString('fa-IR')} تومان (${type})\n`;
-      total += t.type === 'DEBIT' ? t.amount : -t.amount;
+      message += `${jalaliDate}: ${amount} تومان (${type})\n`;
+      total += t.type === 'DEBIT' ? Number(t.amount) : Number(-t.amount);
     });
 
     message += `--------------------------\n`;
@@ -54,10 +60,12 @@ export class ExportService {
     message += `\n\n+دفتر معین شخصی+`;
 
     if (navigator.share) {
-      navigator.share({ 
-        title: 'صورت‌حساب', 
-        text: message 
-      }).catch(console.error);
+      navigator
+        .share({
+          title: 'صورت‌حساب',
+          text: message,
+        })
+        .catch(console.error);
     } else {
       // Fallback: Copy to clipboard
       const el = document.createElement('textarea');
