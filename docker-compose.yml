@@ -1,0 +1,6 @@
+services:
+  angular-app:
+    build: .
+    ports:
+      - "9182:80"
+    restart: unless-stopped

@@ -1,4 +1,5 @@
 export const environment = {
-  production: false,
-  apiUrl: 'http://localhost:2686', // Change this to your API base URL
+  production: true,
+  // apiUrl: 'http://localhost:2686', // Change this to your API base URL
+  apiUrl: 'https://api.moapp.ir', // Change this to your API base URL
 };
