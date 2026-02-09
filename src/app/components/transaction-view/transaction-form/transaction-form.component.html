@@ -35,6 +35,8 @@
       <div class="relative">
         <input
           type="text"
+          inputmode="numeric"
+          pattern="[0-9]*"
           [value]="getFormattedAmount()"
           (input)="handleAmountInput($event)"
           placeholder="مبلغ را وارد کنید"

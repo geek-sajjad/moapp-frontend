@@ -277,7 +277,7 @@ export class TransactionViewComponent implements OnInit {
       return;
     }
 
-    this.exportService.shareStatement(person.name, this.transactions());
+    this.exportService.shareStatement(this.transactions(), person.name, person.phone);
     this.alertService.showSuccess('متن صورت‌حساب کپی شد.');
   }
 

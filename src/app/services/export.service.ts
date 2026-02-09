@@ -36,10 +36,48 @@ export class ExportService {
   //   URL.revokeObjectURL(url);
   // }
 
-  shareStatement(personName: string, transactions: Transaction[]): void {
-    if (transactions.length === 0) {
-      return;
-    }
+  // shareStatement(personName: string, transactions: Transaction[]): void {
+  //   if (transactions.length === 0) {
+  //     return;
+  //   }
+
+  //   let total = 0;
+  //   let message = `📄 صورت‌حساب: ${personName}\n`;
+  //   message += `📅 تاریخ: ${new Date().toLocaleDateString('fa-IR')}\n`;
+  //   message += `--------------------------\n`;
+
+  //   transactions.forEach((t) => {
+  //     const jalaliDate = this.persianCalanderService.formatDisplayValue(t.date);
+  //     const amount = this.dateUtilService.formatNumber(t.amount);
+  //     const type = t.type === 'DEBIT' ? 'طلبتان' : 'بدهی‌تان';
+  //     message += `${jalaliDate}: ${amount} تومان (${type})\n`;
+  //     total += t.type === 'DEBIT' ? Number(t.amount) : Number(-t.amount);
+  //   });
+
+  //   message += `--------------------------\n`;
+  //   message += `💰 مانده نهایی: ${Math.abs(total).toLocaleString('fa-IR')} تومان\n`;
+  //   message += total >= 0 ? '🔵 طلبکار هستید' : '🔴 بدهکار هستید';
+  //   message += `\n\n+دفتر معین شخصی+`;
+
+  //   if (navigator.share) {
+  //     navigator
+  //       .share({
+  //         title: 'صورت‌حساب',
+  //         text: message,
+  //       })
+  //       .catch(console.error);
+  //   } else {
+  //     // Fallback: Copy to clipboard
+  //     const el = document.createElement('textarea');
+  //     el.value = message;
+  //     document.body.appendChild(el);
+  //     el.select();
+  //     document.execCommand('copy');
+  //     document.body.removeChild(el);
+  //   }
+  // }
+  shareStatement(transactions: Transaction[], personName: string, phoneNumber?: string, ): void {
+    if (transactions.length === 0) return;
 
     let total = 0;
     let message = `📄 صورت‌حساب: ${personName}\n`;
@@ -59,7 +97,11 @@ export class ExportService {
     message += total >= 0 ? '🔵 طلبکار هستید' : '🔴 بدهکار هستید';
     message += `\n\n+دفتر معین شخصی+`;
 
-    if (navigator.share) {
+    if (phoneNumber) {
+      // Use sms: URI scheme
+      const smsLink = `sms:${phoneNumber}?body=${encodeURIComponent(message)}`;
+      window.location.href = smsLink;
+    } else if (navigator.share) {
       navigator
         .share({
           title: 'صورت‌حساب',
