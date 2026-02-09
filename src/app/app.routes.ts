@@ -3,34 +3,36 @@ import { LoginComponent } from './components/login/login.component';
 import { CustomerListComponent } from './components/customer-list/customer-list.component';
 import { TransactionViewComponent } from './components/transaction-view/transaction-view.component';
 import { authGuard } from './guards/auth.guard';
+import { loginGuard } from './guards/login.guard';
 
 export const routes: Routes = [
   {
     path: '',
     redirectTo: '/customers',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
+    canActivate: [loginGuard],
   },
   {
     path: 'customers',
     component: CustomerListComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
   },
   {
     path: 'people',
     redirectTo: '/customers',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'transactions/:id',
     component: TransactionViewComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
   },
   {
     path: '**',
-    redirectTo: '/customers'
-  }
+    redirectTo: '/customers',
+  },
 ];
