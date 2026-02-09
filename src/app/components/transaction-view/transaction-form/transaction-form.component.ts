@@ -9,12 +9,12 @@ import { TransactionFormData } from '../../../models/transaction.model';
   selector: 'app-transaction-form',
   imports: [CommonModule, ButtonComponent, IconComponent, PersianDatepickerComponent],
   templateUrl: './transaction-form.component.html',
-  styles: []
+  styles: [],
 })
 export class TransactionFormComponent {
   isEditing = input<boolean>(false);
   initialData = input<TransactionFormData | null>(null);
-  
+
   onSave = output<TransactionFormData>();
   onCancel = output<void>();
 
@@ -24,24 +24,27 @@ export class TransactionFormComponent {
   formDescription = signal<string>('');
 
   constructor() {
-    effect(() => {
-      const data = this.initialData();
-      if (data) {
-        this.formDate.set(data.transactionDate);
-        this.formType.set(data.type);
-        this.formAmount.set(data.amount);
-        this.formDescription.set(data.description);
-      }
-    });
+    const today = new Date().toISOString().slice(0, 10);
+    this.formDate.set(today);
+    console.log(this.formDate());
+
+    // effect(() => {
+    //   const data = this.initialData();
+    //   if (data) {
+    //     this.formDate.set(data.transactionDate);
+    //     this.formType.set(data.type);
+    //     this.formAmount.set(data.amount);
+    //     this.formDescription.set(data.description);
+    //   }
+    // });
   }
 
   handleSave(): void {
-    console.log(this.formDate());
     this.onSave.emit({
       transactionDate: this.formDate(),
       type: this.formType(),
       amount: this.formAmount(),
-      description: this.formDescription()
+      description: this.formDescription(),
     });
   }
 
@@ -50,7 +53,7 @@ export class TransactionFormComponent {
   }
 
   getTransactionTypeClass(): string {
-    return this.formType() === 'DEBIT' 
+    return this.formType() === 'DEBIT'
       ? 'border-red-500 bg-red-50 text-red-700'
       : 'border-green-500 bg-green-50 text-green-700';
   }
