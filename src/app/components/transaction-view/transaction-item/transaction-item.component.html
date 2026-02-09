@@ -1,26 +1,52 @@
-<div class="flex flex-col p-5 hover:bg-gray-50 transition-colors group gap-4">
-  <div class="flex items-start gap-3.5">
-    <div [class]="'w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ' + (transaction().type === 'DEBIT' ? 'bg-red-50' : 'bg-green-50')">
-      @if (transaction().type === 'DEBIT') {
-        <app-icon name="minus" [size]="20" [class]="'text-red-600'" />
-      } @else {
-        <app-icon name="plus" [size]="20" [class]="'text-green-600'" />
-      }
-    </div>
-    <div class="flex-grow min-w-0">
-      <div class="text-sm text-gray-600 font-medium flex items-center gap-2">
-        <app-icon name="calendar" [size]="14" />
-        {{ transactionDate() }}
+<div class="hover:bg-gray-50 transition-colors group  ">
+  <div class="flex items-center justify-between px-5 py-4">
+    <!-- Left: Icon + Content -->
+    <div class="flex items-center gap-4 min-w-0">
+      <!-- Icon -->
+      <div [class]="
+          'w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ' +
+          (transaction().type === 'DEBIT'
+            ? 'bg-red-100 text-red-600'
+            : 'bg-green-100 text-green-600')
+        ">
+        <app-icon [name]="transaction().type === 'DEBIT' ? 'minus' : 'plus'" [size]="18" />
       </div>
-      <div class="text-gray-900 font-bold text-base mt-1.5 break-words">{{ transaction().description }}</div>
+  
+      <!-- Text content -->
+      <div class="min-w-0">
+        <div class="mt-0.5 flex items-center gap-1.5 text-s text-gray-500">
+          <app-icon name="calendar" [size]="12" />
+          {{ transactionDate() }}
+        </div>
+      </div>
+    </div>
+  
+    <!-- Right: Amount -->
+    <div [class]="
+        'flex text-base font-semibold tabular-nums whitespace-nowrap ' +
+        (transaction().type === 'DEBIT'
+          ? 'text-red-600'
+          : 'text-green-600')
+      ">
+      <div class="ml-1">
+        {{ transaction().type === 'DEBIT' ? '-' : '+' }}
+        {{ formatNumber(transaction().amount) }}
+  
+      </div>
+      <div>
+        تومان
+      </div>
     </div>
   </div>
-
-  <div class="flex items-center gap-2.5">
-    <div 
-      [class]="'text-xl font-extrabold whitespace-nowrap px-4 py-2.5 rounded-xl flex-shrink-0 ' + (transaction().type === 'DEBIT' ? 'text-red-700 bg-red-50' : 'text-green-700 bg-green-50')"
-    >
-      {{ transaction().type === 'DEBIT' ? '-' : '+' }}{{ formatNumber(transaction().amount) }}
-    </div>
-  </div>
+<div class="px-5 pb-4">
+  <p class="
+      text-sm
+      leading-relaxed
+      text-gray-800
+      line-clamp-2
+      break-words
+    ">
+    {{ transaction().description }}
+  </p>
+</div>
 </div>
